@@ -1,7 +1,7 @@
 ﻿using System;
 class Program
 {
-    public static void print_matrix(int[][] matrix)
+    public static void Print_matrix(int[][] matrix)
     {
         Console.WriteLine("-------------------------------------");
         foreach (int[] row in matrix)
@@ -18,7 +18,7 @@ class Program
 
         }
     }
-    public static int input(string invitation)
+    public static int Input(string invitation)
     {
         int result;
         while (true)
@@ -26,7 +26,12 @@ class Program
             try
             {
                 Console.Write(invitation);
-                string str = Console.ReadLine();
+                string? str = Console.ReadLine();
+                if (str == null)
+                {
+                    Console.WriteLine("Invalid input! Try again");
+                    continue;
+                }
                 if (str == "")
                 {
                     result = 0;
@@ -40,16 +45,29 @@ class Program
                 }
                 break;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine("Invalid input! Try again");
             }
         }
         return result;
     }
-    private static void Main(string[] args)
+    private static void Main()
     {
-        int value;
+        bool[][] allowed_rows = new bool[9][] {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true }
+        };
+        bool[][] allowed_columns = allowed_rows;
+        bool[][] allowed_in_square = allowed_rows;
+        int row1 = 0, row2 = 0, row3 = 0;
         int[][] matrix = new int[9][]
         {
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -69,11 +87,95 @@ class Program
                 Console.WriteLine("Put values in Sudoku square");
                 Console.WriteLine("To leave a cell blank, type 0 or press Enter");
                 matrix[i][j] = 10;
-                print_matrix(matrix);
-                matrix[i][j] = input($"Enter a value in {i + 1} row in {j + 1} column: ");
+                Print_matrix(matrix);
+                matrix[i][j] = Input($"Enter a value in {i + 1} row in {j + 1} column: ");
+                allowed_rows[i][matrix[i][j] - 1] = false;
+                allowed_columns[j][matrix[i][j] - 1] = false;
+                allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
                 Console.Clear();
             }
         }
-        Environment.Exit(0);
+        int hints = 0;
+        for (int i = 0; i < 81; i++)
+        {
+            if (matrix[i % 9][i / 9] != 0)
+            {
+                hints++;
+            }
+        }
+        if (hints < 17)
+        {
+            Console.WriteLine("Too few hints!");
+            Environment.Exit(0);
+        }
+        else
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (i / 3 == 0)
+                    {
+                        if (!allowed_rows[i][j]) row1++;
+                    }
+                    else if (i / 3 == 1)
+                    {
+                        if (!allowed_rows[i][j]) row2++;
+                    }
+                    else
+                    {
+                        if (!allowed_rows[i][j]) row3++;
+                    }
+                }
+            }
+            bool solvable = false;
+            if (row1 >= 6)
+            {
+                if (row2 >= 6) solvable = row3 == 5;
+                else if (row2 == 5) solvable = row3 >= 6;
+                else solvable = false;
+            }
+            else if (row1 == 5) 
+                solvable = row2 >= 6 && row3 >= 6;
+
+            if (solvable)
+            {
+
+            }
+            else
+            {
+                Console.WriteLine("The square is unsolvable!");
+                Environment.Exit(0);
+            }
+        }
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                for (int k = j; k < 9; k++)
+                {
+                    if (matrix[i][j] == matrix[i][k] && matrix[i][j] != 0)
+                    {
+                        Console.WriteLine("The square is unsolvable!");
+                        Environment.Exit(0);
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                for (int k = j + 1; k < 9; k++)
+                {
+                    if (matrix[j][i] == matrix[k][i] && matrix[j][i] != 0 ||
+                        matrix[i][j] == matrix[i][k] && matrix[i][j] != 0)
+                    {
+                        Console.WriteLine("The square is unsolvable!");
+                        Environment.Exit(0);
+                    }
+                }
+            }
+        }
     }
 }
