@@ -85,35 +85,27 @@ class Program
             value = Convert.ToInt32(key.KeyChar) - 48;
             if (key.Key == ConsoleKey.W || key.Key == ConsoleKey.UpArrow)
             {
-                if (i != 0)
-                {
-                    matrix[i][j] = prev_value;
-                    i--;
-                }
+                matrix[i][j] = prev_value;
+                if (i != 0) i--;
+                else i = 8;
             }
             if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
             {
-                if (i != 8)
-                {
-                    matrix[i][j] = prev_value;
-                    i++;
-                }
+                matrix[i][j] = prev_value;
+                if (i != 8) i++;
+                else i = 0;
             }
             if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.RightArrow)
             {
-                if (j != 8)
-                {
-                    matrix[i][j] = prev_value;
-                    j++;
-                }
+                matrix[i][j] = prev_value;
+                if (j != 8) j++;
+                else j = 0;
             }
             if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
             {
-                if (j != 0)
-                {
-                    matrix[i][j] = prev_value;
-                    j--;
-                }
+                matrix[i][j] = prev_value;
+                if (j != 0) j --;
+                else j = 8;
             }
             if (value >= 0 && value < 10)
             {
@@ -121,7 +113,12 @@ class Program
                 allowed_rows[i][value - 1] = false;
                 allowed_columns[j][value - 1] = false;
                 allowed_in_square[i / 3 * 3 + j / 3][value - 1] = false;
-                if (j == 8) j--;
+                if (j == 8)
+                {
+                    j = 0;
+                    i++;
+                    i %= 9;
+                }
                 else j++;
             }
             Console.Clear();
