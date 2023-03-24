@@ -75,6 +75,7 @@ class Program
         {
             Console.WriteLine("Put values in Sudoku square.");
             Console.WriteLine("Use the WASD buttons or arrows to move through the cells.");
+            Console.WriteLine("To clear the cell, press Backspace");
             Console.WriteLine("To finish filling, press Enter.");
             prev_value = matrix[i][j];
             if (prev_value == 10) prev_value = 0;
@@ -242,27 +243,28 @@ class Program
                 {
                     if (i / 3 == 0)
                     {
-                        if (!allowed_rows[i][j]) row1++;
+                        if (matrix[i][j] != 0) row1++;
                     }
                     else if (i / 3 == 1)
                     {
-                        if (!allowed_rows[i][j]) row2++;
+                        if (matrix[i][j] != 0) row2++;
                     }
                     else
                     {
-                        if (!allowed_rows[i][j]) row3++;
+                        if (matrix[i][j] != 0) row3++;
                     }
                 }
             }
-            bool solvable = false;
+            bool solvable = true;
             if (row1 >= 6)
             {
-                if (row2 >= 6) solvable = row3 == 5;
+                if (row2 >= 6) solvable = row3 >= 5;
                 else if (row2 == 5) solvable = row3 >= 6;
                 else solvable = false;
             }
             else if (row1 == 5)
                 solvable = row2 >= 6 && row3 >= 6;
+            else solvable = false;
 
             if (!solvable)
             {
@@ -273,7 +275,7 @@ class Program
         {
             for (int j = 0; j < 8; j++)
             {
-                for (int k = j; k < 9; k++)
+                for (int k = j + 1; k < 9; k++)
                 {
                     if (matrix[i][j] == matrix[i][k] && matrix[i][j] != 0)
                     {
