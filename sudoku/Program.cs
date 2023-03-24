@@ -34,6 +34,117 @@ class Program
             new bool[9] { true, true, true, true, true, true, true, true, true },
             new bool[9] { true, true, true, true, true, true, true, true, true }
         };
+    static bool[][][] allowed = new bool[9][][]
+    {
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        },
+        new bool[9][]
+        {
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+            new bool[9] { true, true, true, true, true, true, true, true, true },
+        }
+    };
     public static void Print_matrix(int[][] matrix)
     {
         Console.WriteLine("=====================================");
@@ -56,7 +167,7 @@ class Program
     }
     public static int[][] Input()
     {
-        int[][] matrix = new int[9][]
+        /*int[][] matrix = new int[9][]
         {
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -67,8 +178,54 @@ class Program
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+        };*/
+        int[][] matrix = new int[9][]
+        {
+            new int[9] { 5, 8, 6, 0, 0, 7, 0, 9, 0 },
+            new int[9] { 2, 0, 9, 0, 0, 0, 0, 7, 3 },
+            new int[9] { 0, 0, 1, 0, 0, 9, 0, 0, 5 },
+            new int[9] { 8, 0, 0, 0, 9, 0, 4, 6, 0 },
+            new int[9] { 4, 0, 3, 6, 0, 5, 9, 0, 8 },
+            new int[9] { 0, 9, 7, 0, 8, 0, 0, 0, 1 },
+            new int[9] { 1, 0, 0, 7, 0, 0, 2, 0, 0 },
+            new int[9] { 3, 7, 0, 0, 0, 0, 5, 0, 6 },
+            new int[9] { 0, 2, 0, 8, 0, 0, 7, 1, 4 }
         };
-        int i = 0, j = 0, value, prev_value;
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (matrix[i][j] != 0)
+                {
+                    allowed_rows[i][matrix[i][j] - 1] = false;
+                    allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                    allowed_columns[j][matrix[i][j] - 1] = false;
+                    allowed[i][j][matrix[i][j] - 1] = false;
+                }
+            }
+        }
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (!allowed_rows[i][j])
+                {
+                    for (int k = 0; k < 9; k++)
+                    {
+                        allowed[i][k][j] = false;
+                    }
+                }
+                if (!allowed_columns[i][j])
+                {
+                    for (int k = 0; k < 9; k++)
+                    {
+                        allowed[k][i][j] = false;
+                    }
+                }
+            }
+        }
+        return matrix;
+        /*int i = 0, j = 0, value, prev_value;
         matrix[i][j] = 10;
         ConsoleKeyInfo key = new ConsoleKeyInfo();
         while (key.Key != ConsoleKey.Enter)
@@ -123,7 +280,7 @@ class Program
             }
             Console.Clear();
         }
-        return matrix;
+        return matrix;*/
     }
     public static int[][] Exact(int[][] matrix)
     {
