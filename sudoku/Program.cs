@@ -3,21 +3,45 @@ class Program
 {
     public static void Print_matrix(int[][] matrix)
     {
-        Console.WriteLine("-------------------------------------");
-        foreach (int[] row in matrix)
+        Console.WriteLine("=====================================");
+        for (int i = 0; i < 9; i++)
         {
-            Console.Write("| ");
-            foreach (int value in row)
+            Console.Write("▌ ");
+            for (int j = 0; j < 9; j++)
             {
+                int value = matrix[i][j];
                 if (value == 0) Console.Write(" ");
                 else if (value == 10) Console.Write("^");
                 else Console.Write(value);
-                Console.Write(" | ");
+                if (j % 3 == 2) Console.Write(" ▌ ");
+                else Console.Write(" | ");
             }
-            Console.WriteLine("\n-------------------------------------");
+            if (i % 3 == 2) Console.WriteLine("\n=====================================");
+            else Console.WriteLine("\n-------------------------------------");
 
         }
     }
+    /*
+    ========================================
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ----------------------------------------
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ----------------------------------------
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ========================================
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ----------------------------------------
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ----------------------------------------
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ========================================
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ----------------------------------------
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ----------------------------------------
+    ❚   |   |   ❚   |   |   ❚   |   |   ❚
+    ========================================
+    */
     public static int Input(string invitation)
     {
         int result;
@@ -89,12 +113,15 @@ class Program
                 matrix[i][j] = 10;
                 Print_matrix(matrix);
                 matrix[i][j] = Input($"Enter a value in {i + 1} row in {j + 1} column: ");
-                allowed_rows[i][matrix[i][j] - 1] = false;
-                allowed_columns[j][matrix[i][j] - 1] = false;
-                allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                if (matrix[i][j] != 0)
+                {
+                    allowed_rows[i][matrix[i][j] - 1] = false;
+                    allowed_columns[j][matrix[i][j] - 1] = false;
+                    allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                }
                 Console.Clear();
             }
-        }
+        }/*
         int hints = 0;
         for (int i = 0; i < 81; i++)
         {
@@ -138,11 +165,7 @@ class Program
             else if (row1 == 5) 
                 solvable = row2 >= 6 && row3 >= 6;
 
-            if (solvable)
-            {
-
-            }
-            else
+            if (!solvable)
             {
                 Console.WriteLine("The square is unsolvable!");
                 Environment.Exit(0);
@@ -176,6 +199,39 @@ class Program
                     }
                 }
             }
+        }*/
+        for (int i = 0; i < 9; i++)
+        {
+            int count = 0;
+            for (int j = 0 ; j < 9; j++)
+            {
+                if (allowed_in_square[i][j]) count++;
+            }
+            if (count == 1)
+            {
+                int value = 0;
+                for (int j = 0; j < 9; j++)
+                {
+                    if (allowed_in_square[i][j])
+                    {
+                        value = j + 1;
+                        break;
+                    }
+                }
+                bool not_found = true;
+                for (int j = i % 3 * 3; j < i % 3 * 3 + 3 && not_found; j++)
+                {
+                    for (int k = i / 3; k < i / 3 + 3 && not_found; k++)
+                    {
+                        if (matrix[k][j] == 0)
+                        {
+                            matrix[k][j] = value;
+                            not_found = false;
+                        }
+                    }
+                }
+            }
         }
+        Print_matrix(matrix);
     }
 }
