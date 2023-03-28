@@ -34,7 +34,7 @@ class Program
             new bool[9] { true, true, true, true, true, true, true, true, true },
             new bool[9] { true, true, true, true, true, true, true, true, true }
         };
-    static bool[][][] allowed = new bool[9][][]
+    static bool[][][] allowed_cells = new bool[9][][]
     {
         new bool[9][]
         {
@@ -145,6 +145,8 @@ class Program
             new bool[9] { true, true, true, true, true, true, true, true, true },
         }
     };
+    static int[] digits_left = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
+    static int digits = 81;
     public static void Print_matrix(int[][] matrix)
     {
         Console.WriteLine("=====================================");
@@ -200,7 +202,9 @@ class Program
                     allowed_rows[i][matrix[i][j] - 1] = false;
                     allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
                     allowed_columns[j][matrix[i][j] - 1] = false;
-                    allowed[i][j][matrix[i][j] - 1] = false;
+                    allowed_cells[i][j][matrix[i][j] - 1] = false;
+                    digits_left[matrix[i][j] - 1]--;
+                    digits--;
                 }
             }
         }
@@ -212,15 +216,25 @@ class Program
                 {
                     for (int k = 0; k < 9; k++)
                     {
-                        allowed[i][k][j] = false;
+                        allowed_cells[i][k][j] = false;
                     }
                 }
                 if (!allowed_columns[i][j])
                 {
                     for (int k = 0; k < 9; k++)
                     {
-                        allowed[k][i][j] = false;
+                        allowed_cells[k][i][j] = false;
                     }
+                }
+            }
+        }
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                if (matrix[i][j] != 0)
+                {
+                    for (int k = 0; k < 9; k++) allowed_cells[i][j][k] = false;
                 }
             }
         }
@@ -286,6 +300,98 @@ class Program
     {
         int count, value;
         bool not_found;
+        for (value = 0; value < 9; value++)
+        {
+            if (digits_left[value] > 0) continue;
+            for (int i = 0; i < 9; i++)
+            {
+                allowed_in_square[i][value] = false;
+                allowed_columns[i][value] = false;
+                allowed_rows[i][value] = false;
+                for (int j = 0; j < 9; j++)
+                {
+                    allowed_cells[i][j][value] = false;
+                }
+            }
+        }
+        for (value = 0; value < 9; value++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (allowed_rows[i * 3][value] && allowed_rows[i * 3 + 1][value] ||
+                    allowed_rows[i * 3][value] && allowed_rows[i * 3 + 2][value] ||
+                    allowed_rows[i * 3 + 1][value] && allowed_rows[i * 3 + 2][value])
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        count = 0;
+                        for (int a = i * 3; a < i * 3 + 3; a++)
+                        {
+                            for (int b = j * 3; b < j * 3 + 3; b++)
+                            {
+                                if (matrix[a][b] == 0 && allowed_rows[a][value])
+                                {
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (count == 1)
+                        {
+                            not_found = true;
+                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
+                            {
+                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
+                                {
+                                    if (matrix[a][b] == 0 && allowed_rows[a][value])
+                                    {
+                                        allowed_rows[a][value] = false;
+                                        not_found = false;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (allowed_columns[i * 3][value] && allowed_columns[i * 3 + 1][value] ||
+                    allowed_columns[i * 3][value] && allowed_columns[i * 3 + 2][value] ||
+                    allowed_columns[i * 3 + 1][value] && allowed_columns[i * 3 + 2][value])
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        count = 0;
+                        for (int a = i * 3; a < i * 3 + 3; a++)
+                        {
+                            for (int b = j * 3; b < j * 3 + 3; b++)
+                            {
+                                if (matrix[b][a] == 0 && allowed_columns[a][value])
+                                {
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (count == 1)
+                        {
+                            not_found = true;
+                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
+                            {
+                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
+                                {
+                                    if (matrix[b][a] == 0 && allowed_columns[a][value])
+                                    {
+                                        allowed_columns[a][value] = false;
+                                        not_found = false;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         for (int i = 0; i < 9; i++)
         {
             count = 0;
@@ -300,7 +406,7 @@ class Program
                 {
                     if (allowed_in_square[i][j])
                     {
-                        value = j + 1;
+                        value = j;
                         break;
                     }
                 }
@@ -311,7 +417,13 @@ class Program
                     {
                         if (matrix[k][j] == 0)
                         {
-                            matrix[k][j] = value;
+                            matrix[k][j] = value + 1;
+                            allowed_rows[k][value] = false;
+                            allowed_columns[j][value] = false;
+                            allowed_cells[k][j][value] = false;
+                            allowed_in_square[i][value] = false;
+                            digits_left[value]--;
+                            digits--;
                             not_found = false;
                         }
                     }
@@ -330,7 +442,7 @@ class Program
                 {
                     if (allowed_rows[i][j])
                     {
-                        value = j + 1;
+                        value = j;
                         break;
                     }
                 }
@@ -339,7 +451,13 @@ class Program
                 {
                     if (matrix[i][j] == 0)
                     {
-                        matrix[i][j] = value;
+                        matrix[i][j] = value + 1;
+                        allowed_rows[i][value] = false;
+                        allowed_columns[j][value] = false;
+                        allowed_cells[i][j][value] = false;
+                        allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                        digits_left[value]--;
+                        digits--;
                         not_found = false;
                     }
                 }
@@ -357,7 +475,7 @@ class Program
                 {
                     if (allowed_columns[i][j])
                     {
-                        value = j + 1;
+                        value = j;
                         break;
                     }
                 }
@@ -366,8 +484,106 @@ class Program
                 {
                     if (matrix[j][i] == 0)
                     {
-                        matrix[j][i] = value;
+                        matrix[j][i] = value + 1;
+                        allowed_rows[j][value] = false;
+                        allowed_columns[i][value] = false;
+                        allowed_cells[j][i][value] = false;
+                        allowed_in_square[j / 3 * 3 + i / 3][value] = false;
+                        digits_left[value]--;
+                        digits--;
                         not_found = false;
+                    }
+                }
+            }
+
+            count = 0;
+            for (int j = 0; j < 9; j++)
+            {
+                if (allowed_in_square[i][j]) count++;
+            }
+            if (count == 1)
+            {
+                not_found = true;
+                for (int j = 0; j < 9; j++)
+                {
+                    if (allowed_in_square[i][j]) value = j;
+                }
+                for (int j = i / 3 * 3; j < i / 3 * 3 + 3 && not_found; j++)
+                {
+                    for (int k = i / 3; k < i / 3 + 3 && not_found; k++)
+                    {
+                        if (matrix[j][k] == 0)
+                        {
+                            matrix[j][k] = value + 1;
+                            allowed_rows[j][value] = false;
+                            allowed_columns[k][value] = false;
+                            allowed_cells[j][k][value] = false;
+                            allowed_in_square[i][value] = false;
+                            digits_left[value]--;
+                            digits--;
+                            not_found = false;
+                        }
+                    }
+                }
+            }
+        }
+        for (int sub_square = 0; sub_square < 9; sub_square++)
+        {
+            for (value = 0; value < 9; value++)
+            {
+                if (!allowed_in_square[sub_square][value]) continue;
+                int[][] probable = new int[9][];
+                int ptr = 0;
+                for (int row = sub_square / 3 * 3; row < sub_square / 3 * 3 + 3; row++)
+                {
+                    for (int column = sub_square * 3 % 9; column < sub_square * 3 % 9 + 3; column++)
+                    {
+                        if (allowed_cells[row][column][value]) 
+                        {
+                            probable[ptr] = new int[2] { row, column };
+                            ptr++;
+                        }
+                    }
+                }
+                if (ptr == 1)
+                {
+                    matrix[probable[0][0]][probable[0][1]] = value + 1;
+                    allowed_cells[probable[0][0]][probable[0][1]][value] = false;
+                    allowed_rows[probable[0][0]][value] = false;
+                    allowed_columns[probable[0][1]][value] = false;
+                    allowed_in_square[sub_square][value] = false;
+                    digits_left[value]--;
+                    digits--;
+                }
+            }
+
+            count = 0;
+            for (int j = 0; j < 9; j++)
+            {
+                if (allowed_in_square[sub_square][j]) count++;
+            }
+            if (count == 1)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (allowed_in_square[sub_square][j]) value = j + 1;
+                }
+                not_found = true;
+                for (int j = sub_square / 3 * 3; j < sub_square / 3 * 3 + 3 && not_found; j++)
+                {
+                    for (int k = sub_square % 3 * 3; k < sub_square % 3 * 3 + 3 && not_found; k++)
+                    {
+                        if (matrix[j][k] == 0)
+                        {
+                            matrix[j][k] = value;
+                            allowed_cells[j][k][value] = false;
+                            allowed_rows[j][value] = false;
+                            allowed_columns[k][value] = false;
+                            allowed_in_square[sub_square][value] = false;
+                            digits_left[value]--;
+                            digits--;
+                            not_found = false;
+                        }
                     }
                 }
             }
@@ -409,7 +625,7 @@ class Program
                     }
                 }
             }
-            bool solvable = true;
+            bool solvable;
             if (row1 >= 6)
             {
                 if (row2 >= 6) solvable = row3 >= 5;
@@ -463,6 +679,7 @@ class Program
             Console.WriteLine("The square is unsolvable");
             Environment.Exit(0);
         }
+        matrix = Exact(matrix);
         matrix = Exact(matrix);
         Console.WriteLine("Solved sudoku:");
         Print_matrix(matrix);
