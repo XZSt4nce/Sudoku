@@ -34,7 +34,7 @@ class Program
             new bool[9] { true, true, true, true, true, true, true, true, true },
             new bool[9] { true, true, true, true, true, true, true, true, true }
         };
-    static bool[][][] allowed = new bool[9][][]
+    static bool[][][] allowed_cells = new bool[9][][]
     {
         new bool[9][]
         {
@@ -145,6 +145,8 @@ class Program
             new bool[9] { true, true, true, true, true, true, true, true, true },
         }
     };
+    static int[] digits_left = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
+    static int digits = 81;
     public static void Print_matrix(int[][] matrix)
     {
         Console.WriteLine("=====================================");
@@ -179,18 +181,78 @@ class Program
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };*/
+
         int[][] matrix = new int[9][]
         {
-            new int[9] { 5, 8, 6, 0, 0, 7, 0, 9, 0 },
-            new int[9] { 2, 0, 9, 0, 0, 0, 0, 7, 3 },
-            new int[9] { 0, 0, 1, 0, 0, 9, 0, 0, 5 },
-            new int[9] { 8, 0, 0, 0, 9, 0, 4, 6, 0 },
-            new int[9] { 4, 0, 3, 6, 0, 5, 9, 0, 8 },
-            new int[9] { 0, 9, 7, 0, 8, 0, 0, 0, 1 },
-            new int[9] { 1, 0, 0, 7, 0, 0, 2, 0, 0 },
-            new int[9] { 3, 7, 0, 0, 0, 0, 5, 0, 6 },
-            new int[9] { 0, 2, 0, 8, 0, 0, 7, 1, 4 }
+            new int[9] { 0, 0, 0, 9, 0, 0, 0, 4, 0 },
+            new int[9] { 7, 0, 0, 0, 5, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 6, 8 },
+            new int[9] { 9, 6, 0, 4, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 7, 2, 0, 0 },
+            new int[9] { 0, 8, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 8, 2, 0, 0, 0, 0 },
+            new int[9] { 3, 0, 0, 0, 0, 0, 7, 0, 0 },
+            new int[9] { 0, 0, 0, 6, 0, 0, 0, 0, 0 }
         };
+
+        int a = 0, b = 0, value, prev_value = 0;
+        matrix[a][b] = 10;
+        ConsoleKeyInfo key = new ConsoleKeyInfo();
+        while (key.Key != ConsoleKey.Enter)
+        {
+            Console.WriteLine("Put values in Sudoku square.");
+            Console.WriteLine("Use the WASD buttons or arrows to move through the cells.");
+            Console.WriteLine("To clear the cell, press Backspace");
+            Console.WriteLine("To finish filling, press Enter.");
+            prev_value = matrix[a][b];
+            if (prev_value == 10) prev_value = 0;
+            matrix[a][b] = 10;
+            Print_matrix(matrix);
+            Console.CursorVisible = false;
+            key = Console.ReadKey(true);
+            Console.CursorVisible = true;
+            value = Convert.ToInt32(key.KeyChar) - 48;
+            if (key.Key == ConsoleKey.W || key.Key == ConsoleKey.UpArrow)
+            {
+                matrix[a][b] = prev_value;
+                if (a != 0) a--;
+                else a = 8;
+            }
+            if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
+            {
+                matrix[a][b] = prev_value;
+                if (a != 8) a++;
+                else a = 0;
+            }
+            if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.RightArrow)
+            {
+                matrix[a][b] = prev_value;
+                if (b != 8) b++;
+                else b = 0;
+            }
+            if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
+            {
+                matrix[a][b] = prev_value;
+                if (b != 0) b --;
+                else b = 8;
+            }
+            if (value >= 0 && value < 10)
+            {
+                matrix[a][b] = value;
+                allowed_rows[a][value - 1] = false;
+                allowed_columns[b][value - 1] = false;
+                allowed_in_square[a / 3 * 3 + b / 3][value - 1] = false;
+                if (b == 8)
+                {
+                    b = 0;
+                    a++;
+                    a %= 9;
+                }
+                else b++;
+            }
+            Console.Clear();
+        }
+        matrix[a][b] = prev_value;
         for (int i = 0; i < 9; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -200,7 +262,9 @@ class Program
                     allowed_rows[i][matrix[i][j] - 1] = false;
                     allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
                     allowed_columns[j][matrix[i][j] - 1] = false;
-                    allowed[i][j][matrix[i][j] - 1] = false;
+                    allowed_cells[i][j][matrix[i][j] - 1] = false;
+                    digits_left[matrix[i][j] - 1]--;
+                    digits--;
                 }
             }
         }
@@ -212,80 +276,140 @@ class Program
                 {
                     for (int k = 0; k < 9; k++)
                     {
-                        allowed[i][k][j] = false;
+                        allowed_cells[i][k][j] = false;
                     }
                 }
                 if (!allowed_columns[i][j])
                 {
                     for (int k = 0; k < 9; k++)
                     {
-                        allowed[k][i][j] = false;
+                        allowed_cells[k][i][j] = false;
                     }
                 }
             }
         }
-        return matrix;
-        /*int i = 0, j = 0, value, prev_value;
-        matrix[i][j] = 10;
-        ConsoleKeyInfo key = new ConsoleKeyInfo();
-        while (key.Key != ConsoleKey.Enter)
+        for (int i = 0; i < 9; i++)
         {
-            Console.WriteLine("Put values in Sudoku square.");
-            Console.WriteLine("Use the WASD buttons or arrows to move through the cells.");
-            Console.WriteLine("To clear the cell, press Backspace");
-            Console.WriteLine("To finish filling, press Enter.");
-            prev_value = matrix[i][j];
-            if (prev_value == 10) prev_value = 0;
-            matrix[i][j] = 10;
-            Print_matrix(matrix);
-            key = Console.ReadKey(true);
-            value = Convert.ToInt32(key.KeyChar) - 48;
-            if (key.Key == ConsoleKey.W || key.Key == ConsoleKey.UpArrow)
+            for (int j = 0; j < 9; j++)
             {
-                matrix[i][j] = prev_value;
-                if (i != 0) i--;
-                else i = 8;
-            }
-            if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
-            {
-                matrix[i][j] = prev_value;
-                if (i != 8) i++;
-                else i = 0;
-            }
-            if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.RightArrow)
-            {
-                matrix[i][j] = prev_value;
-                if (j != 8) j++;
-                else j = 0;
-            }
-            if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
-            {
-                matrix[i][j] = prev_value;
-                if (j != 0) j --;
-                else j = 8;
-            }
-            if (value >= 0 && value < 10)
-            {
-                matrix[i][j] = value;
-                allowed_rows[i][value - 1] = false;
-                allowed_columns[j][value - 1] = false;
-                allowed_in_square[i / 3 * 3 + j / 3][value - 1] = false;
-                if (j == 8)
+                if (matrix[i][j] != 0)
                 {
-                    j = 0;
-                    i++;
-                    i %= 9;
+                    for (int k = 0; k < 9; k++) allowed_cells[i][j][k] = false;
                 }
-                else j++;
             }
-            Console.Clear();
         }
-        return matrix;*/
+        return matrix;
     }
     public static int[][] Exact(int[][] matrix)
     {
         int count, value;
         bool not_found;
+        for (value = 0; value < 9; value++)
+        {
+            if (digits_left[value] > 0) continue;
+            for (int i = 0; i < 9; i++)
+            {
+                allowed_in_square[i][value] = false;
+                allowed_columns[i][value] = false;
+                allowed_rows[i][value] = false;
+                for (int j = 0; j < 9; j++)
+                {
+                    allowed_cells[i][j][value] = false;
+                }
+            }
+        }
+        for (value = 0; value < 9; value++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (allowed_rows[i * 3][value] && allowed_rows[i * 3 + 1][value] ||
+                    allowed_rows[i * 3][value] && allowed_rows[i * 3 + 2][value] ||
+                    allowed_rows[i * 3 + 1][value] && allowed_rows[i * 3 + 2][value])
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        count = 0;
+                        for (int a = i * 3; a < i * 3 + 3; a++)
+                        {
+                            for (int b = j * 3; b < j * 3 + 3; b++)
+                            {
+                                if (matrix[a][b] == 0)
+                                {
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (count == 1)
+                        {
+                            not_found = true;
+                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
+                            {
+                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
+                                {
+                                    if (matrix[a][b] == 0)
+                                    {
+                                        for (int c = 0; c < j * 3; c++)
+                                        {
+                                            allowed_cells[a][c][value] = false;
+                                        }
+                                        for (int c = j * 3 + 3; c < 9; c++)
+                                        {
+                                            allowed_cells[a][c][value] = false;
+                                        }
+                                        not_found = false;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (allowed_columns[i * 3][value] && allowed_columns[i * 3 + 1][value] ||
+                    allowed_columns[i * 3][value] && allowed_columns[i * 3 + 2][value] ||
+                    allowed_columns[i * 3 + 1][value] && allowed_columns[i * 3 + 2][value])
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        count = 0;
+                        for (int a = i * 3; a < i * 3 + 3; a++)
+                        {
+                            for (int b = j * 3; b < j * 3 + 3; b++)
+                            {
+                                if (matrix[b][a] == 0)
+                                {
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (count == 1)
+                        {
+                            not_found = true;
+                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
+                            {
+                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
+                                {
+                                    if (matrix[b][a] == 0)
+                                    {
+                                        for (int c = 0; c < j * 3; c++)
+                                        {
+                                            allowed_cells[c][a][value] = false;
+                                        }
+                                        for (int c = j * 3 + 3; c < 9; c++)
+                                        {
+                                            allowed_cells[c][a][value] = false;
+                                        }
+                                        not_found = false;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         for (int i = 0; i < 9; i++)
         {
             count = 0;
@@ -300,18 +424,30 @@ class Program
                 {
                     if (allowed_in_square[i][j])
                     {
-                        value = j + 1;
+                        value = j;
                         break;
                     }
                 }
                 not_found = true;
                 for (int j = i % 3 * 3; j < i % 3 * 3 + 3 && not_found; j++)
                 {
-                    for (int k = i / 3; k < i / 3 + 3 && not_found; k++)
+                    for (int k = i / 3 * 3; k < i / 3 * 3 + 3 && not_found; k++)
                     {
                         if (matrix[k][j] == 0)
                         {
-                            matrix[k][j] = value;
+                            matrix[k][j] = value + 1;
+                            Console.Clear();
+                            Print_matrix(matrix);
+                            allowed_rows[k][value] = false;
+                            allowed_columns[j][value] = false;
+                            allowed_cells[k][j][value] = false;
+                            for (int v = 0; v < 9; v++)
+                            {
+                                allowed_cells[k][j][v] = false;
+                            }
+                            allowed_in_square[i][value] = false;
+                            digits_left[value]--;
+                            digits--;
                             not_found = false;
                         }
                     }
@@ -330,7 +466,7 @@ class Program
                 {
                     if (allowed_rows[i][j])
                     {
-                        value = j + 1;
+                        value = j;
                         break;
                     }
                 }
@@ -339,7 +475,19 @@ class Program
                 {
                     if (matrix[i][j] == 0)
                     {
-                        matrix[i][j] = value;
+                        matrix[i][j] = value + 1;
+                        Console.Clear();
+                        Print_matrix(matrix);
+                        allowed_rows[i][value] = false;
+                        allowed_columns[j][value] = false;
+                        allowed_cells[i][j][value] = false;
+                        for (int v = 0; v < 9; v++)
+                        {
+                            allowed_cells[i][j][v] = false;
+                        }
+                        allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                        digits_left[value]--;
+                        digits--;
                         not_found = false;
                     }
                 }
@@ -357,7 +505,7 @@ class Program
                 {
                     if (allowed_columns[i][j])
                     {
-                        value = j + 1;
+                        value = j;
                         break;
                     }
                 }
@@ -366,9 +514,127 @@ class Program
                 {
                     if (matrix[j][i] == 0)
                     {
-                        matrix[j][i] = value;
+                        matrix[j][i] = value + 1;
+                        Console.Clear();
+                        Print_matrix(matrix);
+                        allowed_rows[j][value] = false;
+                        allowed_columns[i][value] = false;
+                        for (int v = 0; v < 9; v++)
+                        {
+                            allowed_cells[j][i][v] = false;
+                        }
+                        allowed_in_square[j / 3 * 3 + i / 3][value] = false;
+                        digits_left[value]--;
+                        digits--;
                         not_found = false;
                     }
+                }
+            }
+
+            count = 0;
+            for (int j = 0; j < 9; j++)
+            {
+                if (allowed_in_square[i][j]) count++;
+            }
+            if (count == 1)
+            {
+                not_found = true;
+                for (int j = 0; j < 9; j++)
+                {
+                    if (allowed_in_square[i][j]) value = j;
+                }
+                for (int j = i / 3 * 3; j < i / 3 * 3 + 3 && not_found; j++)
+                {
+                    for (int k = i % 3 * 3; k < i % 3 * 3 + 3 && not_found; k++)
+                    {
+                        if (matrix[j][k] == 0)
+                        {
+                            matrix[j][k] = value + 1;
+                            Console.Clear();
+                            Print_matrix(matrix);
+                            allowed_rows[j][value] = false;
+                            allowed_columns[k][value] = false;
+                            for (int v = 0; v < 9; v++)
+                            {
+                                allowed_cells[j][k][v] = false;
+                            }
+                            allowed_in_square[i][value] = false;
+                            digits_left[value]--;
+                            digits--;
+                            not_found = false;
+                        }
+                    }
+                }
+            }
+        }
+        for (int sub_square = 0; sub_square < 9; sub_square++)
+        {
+            count = 0;
+            for (int j = 0; j < 9; j++)
+            {
+                if (allowed_in_square[sub_square][j]) count++;
+            }
+            if (count == 1)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (allowed_in_square[sub_square][j]) value = j;
+                }
+                not_found = true;
+                for (int j = sub_square / 3 * 3; j < sub_square / 3 * 3 + 3 && not_found; j++)
+                {
+                    for (int k = sub_square % 3 * 3; k < sub_square % 3 * 3 + 3 && not_found; k++)
+                    {
+                        if (matrix[j][k] == 0)
+                        {
+                            matrix[j][k] = value + 1;
+                            Console.Clear();
+                            Print_matrix(matrix);
+                            for (int v = 0; v < 9; v++)
+                            {
+                                allowed_cells[j][k][v] = false;
+                            }
+                            allowed_rows[j][value] = false;
+                            allowed_columns[k][value] = false;
+                            allowed_in_square[sub_square][value] = false;
+                            digits_left[value]--;
+                            digits--;
+                            not_found = false;
+                        }
+                    }
+                }
+            }
+
+            for (value = 0; value < 9; value++)
+            {
+                if (!allowed_in_square[sub_square][value]) continue;
+                int[][] probable = new int[9][];
+                int ptr = 0;
+                for (int row = sub_square / 3 * 3; row < sub_square / 3 * 3 + 3; row++)
+                {
+                    for (int column = sub_square % 3 * 3; column < sub_square % 3 * 3 + 3; column++)
+                    {
+                        if (allowed_cells[row][column][value] && allowed_columns[column][value] && allowed_rows[row][value])
+                        {
+                            probable[ptr] = new int[2] { row, column };
+                            ptr++;
+                        }
+                    }
+                }
+                if (ptr == 1)
+                {
+                    matrix[probable[0][0]][probable[0][1]] = value + 1;
+                    Console.Clear();
+                    Print_matrix(matrix);
+                    for (int v = 0; v < 9; v++)
+                    {
+                        allowed_cells[probable[0][0]][probable[0][1]][v] = false;
+                    }
+                    allowed_rows[probable[0][0]][value] = false;
+                    allowed_columns[probable[0][1]][value] = false;
+                    allowed_in_square[sub_square][value] = false;
+                    digits_left[value]--;
+                    digits--;
                 }
             }
         }
@@ -409,7 +675,7 @@ class Program
                     }
                 }
             }
-            bool solvable = true;
+            bool solvable;
             if (row1 >= 6)
             {
                 if (row2 >= 6) solvable = row3 >= 5;
@@ -463,7 +729,8 @@ class Program
             Console.WriteLine("The square is unsolvable");
             Environment.Exit(0);
         }
-        matrix = Exact(matrix);
+        while (digits > 0) matrix = Exact(matrix);
+        Console.Clear();
         Console.WriteLine("Solved sudoku:");
         Print_matrix(matrix);
     }
