@@ -233,7 +233,7 @@ class Program
             if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
             {
                 matrix[a][b] = prev_value;
-                if (b != 0) b --;
+                if (b != 0) b--;
                 else b = 8;
             }
             if (value >= 0 && value < 10)
