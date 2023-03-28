@@ -233,7 +233,7 @@ class Program
             if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
             {
                 matrix[a][b] = prev_value;
-                if (b != 0) b --;
+                if (b != 0) b--;
                 else b = 8;
             }
             if (value >= 0 && value < 10)
@@ -333,7 +333,7 @@ class Program
                         {
                             for (int b = j * 3; b < j * 3 + 3; b++)
                             {
-                                if (matrix[a][b] == 0)
+                                if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value])
                                 {
                                     count++;
                                     break;
@@ -347,7 +347,7 @@ class Program
                             {
                                 for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
                                 {
-                                    if (matrix[a][b] == 0)
+                                    if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value])
                                     {
                                         for (int c = 0; c < j * 3; c++)
                                         {
@@ -376,7 +376,7 @@ class Program
                         {
                             for (int b = j * 3; b < j * 3 + 3; b++)
                             {
-                                if (matrix[b][a] == 0)
+                                if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value])
                                 {
                                     count++;
                                     break;
@@ -390,7 +390,7 @@ class Program
                             {
                                 for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
                                 {
-                                    if (matrix[b][a] == 0)
+                                    if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value])
                                     {
                                         for (int c = 0; c < j * 3; c++)
                                         {
