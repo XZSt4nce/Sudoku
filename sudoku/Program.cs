@@ -197,7 +197,7 @@ class Program
 
         int a = 0, b = 0, value, prev_value = 0;
         matrix[a][b] = 10;
-        ConsoleKeyInfo key = new ConsoleKeyInfo();
+        ConsoleKeyInfo key = new();
         while (key.Key != ConsoleKey.Enter)
         {
             Console.WriteLine("Put values in Sudoku square.");
@@ -357,6 +357,7 @@ class Program
                                         {
                                             allowed_cells[a][c][value] = false;
                                         }
+                                        // breakpoint: count == 1 && value == 7 && i == 1 && j == 0 && a == 4 && b == 0
                                         not_found = false;
                                     }
                                 }
