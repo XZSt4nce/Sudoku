@@ -272,17 +272,14 @@ class Program
                     allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
                     pen_digits[i / 3 * 3 + j / 3][matrix[i][j] - 1]--;
                     allowed_columns[j][matrix[i][j] - 1] = false;
-                    for (int k = 0; k < 9; k++) allowed_cells[i][j][k] = false;
+                    for (int k = 0; k < 9; k++)
+                    {
+                        allowed_cells[i][j][k] = false;
+                        allowed_cells[i][k][matrix[i][j] - 1] = false;
+                        allowed_cells[k][j][matrix[i][j] - 1] = false;
+                    }
                     digits_left[matrix[i][j] - 1]--;
                     digits--;
-                }
-                if (!allowed_rows[i][j])
-                {
-                    for (int k = 0; k < 9; k++) allowed_cells[i][k][j] = false;
-                }
-                if (!allowed_columns[i][j])
-                {
-                    for (int k = 0; k < 9; k++) allowed_cells[k][i][j] = false;
                 }
             }
         }
@@ -339,14 +336,8 @@ class Program
                                     // breakpoint: value == 7 && i == 1 && j == 0 && a == 4 && b == 0
                                     if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value] && allowed_cells[a][b][value])
                                     {
-                                        for (int c = 0; c < j * 3; c++)
-                                        {
-                                            allowed_cells[a][c][value] = false;
-                                        }
-                                        for (int c = j * 3 + 3; c < 9; c++)
-                                        {
-                                            allowed_cells[a][c][value] = false;
-                                        }
+                                        for (int c = 0; c < j * 3; c++) allowed_cells[a][c][value] = false;
+                                        for (int c = j * 3 + 3; c < 9; c++) allowed_cells[a][c][value] = false;
                                         not_found = false;
                                     }
                                 }
@@ -383,14 +374,8 @@ class Program
                                 {
                                     if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value] && allowed_cells[b][a][value])
                                     {
-                                        for (int c = 0; c < j * 3; c++)
-                                        {
-                                            allowed_cells[c][a][value] = false;
-                                        }
-                                        for (int c = j * 3 + 3; c < 9; c++)
-                                        {
-                                            allowed_cells[c][a][value] = false;
-                                        }
+                                        for (int c = 0; c < j * 3; c++) allowed_cells[c][a][value] = false;
+                                        for (int c = j * 3 + 3; c < 9; c++) allowed_cells[c][a][value] = false;
                                         not_found = false;
                                     }
                                 }
@@ -429,17 +414,10 @@ class Program
                             matrix[k][j] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
-                            for (int t = 0; t < 9; t++)
-                            {
-                                if (allowed_cells[k][j][t]) pen_digits[i][t]--;
-                            }
                             allowed_rows[k][value] = false;
                             allowed_columns[j][value] = false;
                             allowed_cells[k][j][value] = false;
-                            for (int v = 0; v < 9; v++)
-                            {
-                                allowed_cells[k][j][v] = false;
-                            }
+                            for (int v = 0; v < 9; v++) allowed_cells[k][j][v] = false;
                             allowed_in_square[i][value] = false;
                             pen_digits[i][value] = 0;
                             digits_left[value]--;
@@ -474,10 +452,6 @@ class Program
                         matrix[i][j] = value + 1;
                         Console.Clear();
                         Print_matrix(matrix);
-                        for (int t = 0; t < 9; t++)
-                        {
-                            if (allowed_cells[i][j][t]) pen_digits[i / 3 * 3 + j / 3][t]--;
-                        }
                         allowed_rows[i][value] = false;
                         allowed_columns[j][value] = false;
                         allowed_cells[i][j][value] = false;
@@ -515,10 +489,6 @@ class Program
                         matrix[j][i] = value + 1;
                         Console.Clear();
                         Print_matrix(matrix);
-                        for (int t = 0; t < 9; t++)
-                        {
-                            if (allowed_cells[i][j][t]) pen_digits[j / 3 * 3 + i / 3][t]--;
-                        }
                         allowed_rows[j][value] = false;
                         allowed_columns[i][value] = false;
                         for (int v = 0; v < 9; v++) allowed_cells[j][i][v] = false;
@@ -552,10 +522,6 @@ class Program
                             matrix[j][k] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
-                            for (int t = 0; t < 9; t++)
-                            {
-                                if (allowed_cells[j][k][t]) pen_digits[i][t]--;
-                            }
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
                             for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
@@ -592,10 +558,6 @@ class Program
                             matrix[j][k] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
-                            for (int t = 0; t < 9; t++)
-                            {
-                                if (allowed_cells[j][k][t]) pen_digits[sub_square][t]--;
-                            }
                             for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
@@ -630,10 +592,6 @@ class Program
                     matrix[probable[0][0]][probable[0][1]] = value + 1;
                     Console.Clear();
                     Print_matrix(matrix);
-                    for (int t = 0; t < 9; t++)
-                    {
-                        if (allowed_cells[probable[0][0]][probable[0][1]][t]) pen_digits[sub_square][t]--;
-                    }
                     for (int v = 0; v < 9; v++) allowed_cells[probable[0][0]][probable[0][1]][v] = false;
                     allowed_rows[probable[0][0]][value] = false;
                     allowed_columns[probable[0][1]][value] = false;
@@ -643,6 +601,22 @@ class Program
                     digits--;
                 }
             }
+        }
+        for (int i = 0; i <  9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                count = 0;
+                for (int a = i / 3 * 3; a < i / 3 * 3 + 3; a++)
+                {
+                    for (int b = i % 3 * 3; b < i % 3 * 3 + 3; b++)
+                    {
+                        if (allowed_cells[a][b][j]) count++;
+                    }
+                }
+                pen_digits[i][j] = count;
+            }
+
         }
         return matrix;
     }
