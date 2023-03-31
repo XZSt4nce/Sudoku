@@ -429,6 +429,10 @@ class Program
                             matrix[k][j] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
+                            for (int t = 0; t < 9; t++)
+                            {
+                                if (allowed_cells[k][j][t]) pen_digits[i][t]--;
+                            }
                             allowed_rows[k][value] = false;
                             allowed_columns[j][value] = false;
                             allowed_cells[k][j][value] = false;
@@ -437,7 +441,7 @@ class Program
                                 allowed_cells[k][j][v] = false;
                             }
                             allowed_in_square[i][value] = false;
-                            pen_digits[i][value]--;
+                            pen_digits[i][value] = 0;
                             digits_left[value]--;
                             digits--;
                             not_found = false;
@@ -470,12 +474,16 @@ class Program
                         matrix[i][j] = value + 1;
                         Console.Clear();
                         Print_matrix(matrix);
+                        for (int t = 0; t < 9; t++)
+                        {
+                            if (allowed_cells[i][j][t]) pen_digits[i / 3 * 3 + j / 3][t]--;
+                        }
                         allowed_rows[i][value] = false;
                         allowed_columns[j][value] = false;
                         allowed_cells[i][j][value] = false;
                         for (int v = 0; v < 9; v++) allowed_cells[i][j][v] = false;
                         allowed_in_square[i / 3 * 3 + j / 3][value] = false;
-                        pen_digits[i / 3 * 3 + j / 3][value]--;
+                        pen_digits[i / 3 * 3 + j / 3][value] = 0;
                         digits_left[value]--;
                         digits--;
                         not_found = false;
@@ -507,11 +515,15 @@ class Program
                         matrix[j][i] = value + 1;
                         Console.Clear();
                         Print_matrix(matrix);
+                        for (int t = 0; t < 9; t++)
+                        {
+                            if (allowed_cells[i][j][t]) pen_digits[j / 3 * 3 + i / 3][t]--;
+                        }
                         allowed_rows[j][value] = false;
                         allowed_columns[i][value] = false;
                         for (int v = 0; v < 9; v++) allowed_cells[j][i][v] = false;
                         allowed_in_square[j / 3 * 3 + i / 3][value] = false;
-                        pen_digits[j / 3 * 3 + i / 3][value]--;
+                        pen_digits[j / 3 * 3 + i / 3][value] = 0;
                         digits_left[value]--;
                         digits--;
                         not_found = false;
@@ -540,11 +552,15 @@ class Program
                             matrix[j][k] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
+                            for (int t = 0; t < 9; t++)
+                            {
+                                if (allowed_cells[j][k][t]) pen_digits[i][t]--;
+                            }
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
                             for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
                             allowed_in_square[i][value] = false;
-                            pen_digits[i][value]--;
+                            pen_digits[i][value] = 0;
                             digits_left[value]--;
                             digits--;
                             not_found = false;
@@ -576,11 +592,15 @@ class Program
                             matrix[j][k] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
+                            for (int t = 0; t < 9; t++)
+                            {
+                                if (allowed_cells[j][k][t]) pen_digits[sub_square][t]--;
+                            }
                             for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
                             allowed_in_square[sub_square][value] = false;
-                            pen_digits[sub_square][value]--;
+                            pen_digits[sub_square][value] = 0;
                             digits_left[value]--;
                             digits--;
                             not_found = false;
@@ -610,11 +630,15 @@ class Program
                     matrix[probable[0][0]][probable[0][1]] = value + 1;
                     Console.Clear();
                     Print_matrix(matrix);
+                    for (int t = 0; t < 9; t++)
+                    {
+                        if (allowed_cells[probable[0][0]][probable[0][1]][t]) pen_digits[sub_square][t]--;
+                    }
                     for (int v = 0; v < 9; v++) allowed_cells[probable[0][0]][probable[0][1]][v] = false;
                     allowed_rows[probable[0][0]][value] = false;
                     allowed_columns[probable[0][1]][value] = false;
                     allowed_in_square[sub_square][value] = false;
-                    pen_digits[sub_square][value]--;
+                    pen_digits[sub_square][value] = 0;
                     digits_left[value]--;
                     digits--;
                 }
