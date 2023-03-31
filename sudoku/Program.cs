@@ -604,6 +604,19 @@ class Program
         }
         for (int i = 0; i <  9; i++)
         {
+            //Dictionary??
+            for (int j = 0; j < 9; j++)
+            {
+                count = 0;
+                for (int a = i / 3 * 3; a < i / 3 * 3 + 3; a++)
+                {
+                    for (int b = i % 3 * 3; b < i % 3 * 3 + 3; b++)
+                    {
+                        
+                    }
+                }
+            }
+            /*
             for (int j = 0; j < 9; j++)
             {
                 count = 0;
@@ -615,7 +628,7 @@ class Program
                     }
                 }
                 pen_digits[i][j] = count;
-            }
+            }*/
 
         }
         return matrix;
