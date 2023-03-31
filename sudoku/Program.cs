@@ -251,9 +251,6 @@ class Program
             if (value >= 0 && value < 10)
             {
                 matrix[a][b] = value;
-                allowed_rows[a][value - 1] = false;
-                allowed_columns[b][value - 1] = false;
-                allowed_in_square[a / 3 * 3 + b / 3][value - 1] = false;
                 if (b == 8)
                 {
                     b = 0;
@@ -273,40 +270,19 @@ class Program
                 {
                     allowed_rows[i][matrix[i][j] - 1] = false;
                     allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                    pen_digits[i / 3 * 3 + j / 3][matrix[i][j] - 1]--;
                     allowed_columns[j][matrix[i][j] - 1] = false;
-                    allowed_cells[i][j][matrix[i][j] - 1] = false;
+                    for (int k = 0; k < 9; k++) allowed_cells[i][j][k] = false;
                     digits_left[matrix[i][j] - 1]--;
                     digits--;
                 }
-            }
-        }
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
                 if (!allowed_rows[i][j])
                 {
-                    for (int k = 0; k < 9; k++)
-                    {
-                        allowed_cells[i][k][j] = false;
-                    }
+                    for (int k = 0; k < 9; k++) allowed_cells[i][k][j] = false;
                 }
                 if (!allowed_columns[i][j])
                 {
-                    for (int k = 0; k < 9; k++)
-                    {
-                        allowed_cells[k][i][j] = false;
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                if (matrix[i][j] != 0)
-                {
-                    for (int k = 0; k < 9; k++) allowed_cells[i][j][k] = false;
+                    for (int k = 0; k < 9; k++) allowed_cells[k][i][j] = false;
                 }
             }
         }
@@ -461,6 +437,7 @@ class Program
                                 allowed_cells[k][j][v] = false;
                             }
                             allowed_in_square[i][value] = false;
+                            pen_digits[i][value]--;
                             digits_left[value]--;
                             digits--;
                             not_found = false;
@@ -496,11 +473,9 @@ class Program
                         allowed_rows[i][value] = false;
                         allowed_columns[j][value] = false;
                         allowed_cells[i][j][value] = false;
-                        for (int v = 0; v < 9; v++)
-                        {
-                            allowed_cells[i][j][v] = false;
-                        }
-                        allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
+                        for (int v = 0; v < 9; v++) allowed_cells[i][j][v] = false;
+                        allowed_in_square[i / 3 * 3 + j / 3][value] = false;
+                        pen_digits[i / 3 * 3 + j / 3][value]--;
                         digits_left[value]--;
                         digits--;
                         not_found = false;
@@ -534,11 +509,9 @@ class Program
                         Print_matrix(matrix);
                         allowed_rows[j][value] = false;
                         allowed_columns[i][value] = false;
-                        for (int v = 0; v < 9; v++)
-                        {
-                            allowed_cells[j][i][v] = false;
-                        }
+                        for (int v = 0; v < 9; v++) allowed_cells[j][i][v] = false;
                         allowed_in_square[j / 3 * 3 + i / 3][value] = false;
+                        pen_digits[j / 3 * 3 + i / 3][value]--;
                         digits_left[value]--;
                         digits--;
                         not_found = false;
@@ -569,11 +542,9 @@ class Program
                             Print_matrix(matrix);
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
-                            for (int v = 0; v < 9; v++)
-                            {
-                                allowed_cells[j][k][v] = false;
-                            }
+                            for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
                             allowed_in_square[i][value] = false;
+                            pen_digits[i][value]--;
                             digits_left[value]--;
                             digits--;
                             not_found = false;
@@ -605,13 +576,11 @@ class Program
                             matrix[j][k] = value + 1;
                             Console.Clear();
                             Print_matrix(matrix);
-                            for (int v = 0; v < 9; v++)
-                            {
-                                allowed_cells[j][k][v] = false;
-                            }
+                            for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
                             allowed_in_square[sub_square][value] = false;
+                            pen_digits[sub_square][value]--;
                             digits_left[value]--;
                             digits--;
                             not_found = false;
@@ -641,13 +610,11 @@ class Program
                     matrix[probable[0][0]][probable[0][1]] = value + 1;
                     Console.Clear();
                     Print_matrix(matrix);
-                    for (int v = 0; v < 9; v++)
-                    {
-                        allowed_cells[probable[0][0]][probable[0][1]][v] = false;
-                    }
+                    for (int v = 0; v < 9; v++) allowed_cells[probable[0][0]][probable[0][1]][v] = false;
                     allowed_rows[probable[0][0]][value] = false;
                     allowed_columns[probable[0][1]][value] = false;
                     allowed_in_square[sub_square][value] = false;
+                    pen_digits[sub_square][value]--;
                     digits_left[value]--;
                     digits--;
                 }
