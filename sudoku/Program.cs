@@ -145,6 +145,18 @@ class Program
             new bool[9] { true, true, true, true, true, true, true, true, true },
         }
     };
+    static int[][] pen_digits = new int[9][]
+    {
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
+        new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 }
+    };
     static int[] digits_left = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
     static int digits = 81;
     public static void Print_matrix(int[][] matrix)
@@ -328,12 +340,13 @@ class Program
                 {
                     for (int j = 0; j < 3; j++)
                     {
+                        if (!allowed_in_square[i * 3 + j][value]) continue;
                         count = 0;
                         for (int a = i * 3; a < i * 3 + 3; a++)
                         {
                             for (int b = j * 3; b < j * 3 + 3; b++)
                             {
-                                if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value])
+                                if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value] && allowed_cells[a][b][value])
                                 {
                                     count++;
                                     break;
@@ -347,7 +360,8 @@ class Program
                             {
                                 for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
                                 {
-                                    if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value])
+                                    // breakpoint: value == 7 && i == 1 && j == 0 && a == 4 && b == 0
+                                    if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value] && allowed_cells[a][b][value])
                                     {
                                         for (int c = 0; c < j * 3; c++)
                                         {
@@ -357,7 +371,6 @@ class Program
                                         {
                                             allowed_cells[a][c][value] = false;
                                         }
-                                        // breakpoint: count == 1 && value == 7 && i == 1 && j == 0 && a == 4 && b == 0
                                         not_found = false;
                                     }
                                 }
@@ -372,12 +385,13 @@ class Program
                 {
                     for (int j = 0; j < 3; j++)
                     {
+                        if (!allowed_in_square[j * 3 + i][value]) continue;
                         count = 0;
                         for (int a = i * 3; a < i * 3 + 3; a++)
                         {
                             for (int b = j * 3; b < j * 3 + 3; b++)
                             {
-                                if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value])
+                                if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value] && allowed_cells[b][a][value])
                                 {
                                     count++;
                                     break;
@@ -391,7 +405,7 @@ class Program
                             {
                                 for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
                                 {
-                                    if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value])
+                                    if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value] && allowed_cells[b][a][value])
                                     {
                                         for (int c = 0; c < j * 3; c++)
                                         {
