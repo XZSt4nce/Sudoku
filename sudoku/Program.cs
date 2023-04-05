@@ -303,6 +303,28 @@ class Program
                 }
             }
         }
+        for (int i = 0; i < 9; i++)
+        {
+            for (value = 0; value < 9; value++)
+            {
+                if (!allowed_rows[i][value])
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        allowed_cells[i][j][value] = false;
+                        pen_digits[i / 3 + j % 3][value]--;
+                    }
+                }
+                if (!allowed_columns[i][value])
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        allowed_cells[j][j][value] = false;
+                        pen_digits[j / 3 + i % 3][value]--;
+                    }
+                }
+            }
+        }
         for (value = 0; value < 9; value++)
         {
             for (int i = 0; i < 3; i++)
@@ -604,19 +626,6 @@ class Program
         }
         for (int i = 0; i <  9; i++)
         {
-            //Dictionary??
-            for (int j = 0; j < 9; j++)
-            {
-                count = 0;
-                for (int a = i / 3 * 3; a < i / 3 * 3 + 3; a++)
-                {
-                    for (int b = i % 3 * 3; b < i % 3 * 3 + 3; b++)
-                    {
-                        
-                    }
-                }
-            }
-            /*
             for (int j = 0; j < 9; j++)
             {
                 count = 0;
@@ -628,8 +637,47 @@ class Program
                     }
                 }
                 pen_digits[i][j] = count;
-            }*/
-
+            }
+            for (int j = 0; j < 8; j++)
+            {
+                if (!allowed_in_square[i][j]) continue;
+                for (int k = j + 1; k < 9; k++)
+                {
+                    if (pen_digits[i][j] == 2 
+                        && pen_digits[i][k] == 2
+                        && allowed_in_square[i][k])
+                    {
+                        bool same = true;
+                        for (int a = i / 3 * 3; a < i / 3 * 3 + 3 && same; a++)
+                        {
+                            for (int b = i % 3 * 3; b < i % 3 * 3 + 3 && same; b++)
+                            {
+                                if (allowed_cells[a][b][j])
+                                {
+                                    if (!allowed_cells[a][b][k]) same = false;
+                                }
+                                else if (allowed_cells[a][b][k]) same = false;
+                            }
+                        }
+                        if (same)
+                        {
+                            for (int a = i / 3 * 3; a < i / 3 * 3 + 3 && same; a++)
+                            {
+                                for (int b = i % 3 * 3; b < i % 3 * 3 + 3 && same; b++)
+                                {
+                                    if (allowed_cells[a][b][j])
+                                    {
+                                        for (int c = 0; c < 9; c++)
+                                        {
+                                            if (c != j && c != k) allowed_cells[a][b][c] = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         return matrix;
     }
