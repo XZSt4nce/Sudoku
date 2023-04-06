@@ -355,7 +355,6 @@ class Program
                             {
                                 for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
                                 {
-                                    // breakpoint: value == 7 && i == 1 && j == 0 && a == 4 && b == 0
                                     if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value] && allowed_cells[a][b][value])
                                     {
                                         for (int c = 0; c < j * 3; c++) allowed_cells[a][c][value] = false;
