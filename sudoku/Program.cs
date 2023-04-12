@@ -185,7 +185,7 @@ class Program
     }
     public static int[][] Input()
     {
-        int[][] matrix = new int[9][]
+        /*int[][] matrix = new int[9][]
         {
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -196,6 +196,19 @@ class Program
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+        };*/
+
+        int[][] matrix = new int[9][]
+        {
+            new int[9] { 0, 0, 5, 3, 0, 0, 0, 0, 0 },
+            new int[9] { 8, 0, 0, 0, 0, 0, 0, 2, 0 },
+            new int[9] { 0, 7, 0, 0, 1, 0, 5, 0, 0 },
+            new int[9] { 4, 0, 0, 0, 0, 5, 3, 0, 0 },
+            new int[9] { 0, 1, 0, 0, 7, 0, 0, 0, 6 },
+            new int[9] { 0, 0, 3, 2, 0, 0, 0, 8, 0 },
+            new int[9] { 0, 6, 0, 5, 0, 0, 0, 0, 9 },
+            new int[9] { 0, 0, 4, 0, 0, 0, 0, 3, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 9, 7, 0, 0 }
         };
 
         int a = 0, b = 0, value, prev_value = 0;
@@ -303,7 +316,7 @@ class Program
                     for (int j = 0; j < 9; j++)
                     {
                         allowed_cells[i][j][value] = false;
-                        pen_digits[i / 3 + j / 3][value]--;
+                        pen_digits[i / 3 + j % 3][value]--;
                     }
                 }
                 if (!allowed_columns[i][value])
@@ -311,7 +324,7 @@ class Program
                     for (int j = 0; j < 9; j++)
                     {
                         allowed_cells[j][i][value] = false;
-                        pen_digits[j / 3 + i / 3][value]--;
+                        pen_digits[j / 3 + i % 3][value]--;
                     }
                 }
                 if (!allowed_in_square[i][value])
@@ -537,6 +550,7 @@ class Program
                         {
                             matrix[k][j] = value + 1;
                             Console.Clear();
+                            Print_matrix(matrix);
                             allowed_rows[k][value] = false;
                             allowed_columns[j][value] = false;
                             allowed_cells[k][j][value] = false;
@@ -573,6 +587,8 @@ class Program
                     if (matrix[i][j] == 0)
                     {
                         matrix[i][j] = value + 1;
+                        Console.Clear();
+                        Print_matrix(matrix);
                         allowed_rows[i][value] = false;
                         allowed_columns[j][value] = false;
                         allowed_cells[i][j][value] = false;
@@ -608,6 +624,8 @@ class Program
                     if (matrix[j][i] == 0)
                     {
                         matrix[j][i] = value + 1;
+                        Console.Clear();
+                        Print_matrix(matrix);
                         allowed_rows[j][value] = false;
                         allowed_columns[i][value] = false;
                         for (int v = 0; v < 9; v++) allowed_cells[j][i][v] = false;
@@ -639,6 +657,8 @@ class Program
                         if (matrix[j][k] == 0)
                         {
                             matrix[j][k] = value + 1;
+                            Console.Clear();
+                            Print_matrix(matrix);
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
                             for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
@@ -673,6 +693,8 @@ class Program
                         if (matrix[j][k] == 0)
                         {
                             matrix[j][k] = value + 1;
+                            Console.Clear();
+                            Print_matrix(matrix);
                             for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
                             allowed_rows[j][value] = false;
                             allowed_columns[k][value] = false;
@@ -705,6 +727,8 @@ class Program
                 if (ptr == 1)
                 {
                     matrix[probable[0][0]][probable[0][1]] = value + 1;
+                    Console.Clear();
+                    Print_matrix(matrix);
                     for (int v = 0; v < 9; v++) allowed_cells[probable[0][0]][probable[0][1]][v] = false;
                     allowed_rows[probable[0][0]][value] = false;
                     allowed_columns[probable[0][1]][value] = false;
@@ -732,6 +756,8 @@ class Program
                 if (count == 1)
                 {
                     matrix[i][j] = last + 1;
+                    Console.Clear();
+                    Print_matrix(matrix);
                     for (int v = 0; v < 9; v++) allowed_cells[i][j][v] = false;
                     allowed_rows[i][last] = false;
                     allowed_columns[j][last] = false;
@@ -1020,7 +1046,7 @@ class Program
         }
         Stopwatch stopwatch = new();
         stopwatch.Start();
-        while (digits > 0 && stopwatch.ElapsedMilliseconds < 300)
+        while (digits > 0 || Is_not_correct(matrix))// && stopwatch.ElapsedMilliseconds < 300)
         {
             tmp_digits = digits;
             matrix = Solve(matrix);
@@ -1030,7 +1056,7 @@ class Program
                 if (attempt == 3)
                 {
                     attempt = 0;
-                    if (saved)
+                    if (saved && Is_not_correct(matrix))
                     {
                         Dictionary<string, object> save_point = save_points[--points];
                         saved_allowed_cells = (bool[][][])save_point["saved_allowed_cells"];
@@ -1133,6 +1159,8 @@ class Program
                                         if (allowed_cells[x][y][value])
                                         {
                                             matrix[x][y] = value + 1;
+                                            Console.Clear();
+                                            Print_matrix(matrix);
                                             for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
                                             allowed_rows[x][value] = false;
                                             allowed_columns[y][value] = false;
@@ -1174,6 +1202,8 @@ class Program
                                                     save_point.Add("x", x);
                                                     save_point.Add("y", y);
                                                     matrix[x][y] = value + 1;
+                                                    Console.Clear();
+                                                    Print_matrix(matrix);
                                                     for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
                                                     allowed_rows[x][value] = false;
                                                     allowed_columns[y][value] = false;
@@ -1197,11 +1227,13 @@ class Program
             else attempt = 0;
         }
         stopwatch.Stop();
-        if (stopwatch.ElapsedMilliseconds >= 300)
+        /*if (stopwatch.ElapsedMilliseconds >= 300)
         {
             Console.WriteLine("The square is unsolvable");
             Environment.Exit(0);
-        }
+        }*/
+        Console.Clear();
+        Console.WriteLine($"{stopwatch.ElapsedMilliseconds / 1000.0} seconds");
         Console.WriteLine("Solved sudoku:");
         Print_matrix(matrix);
         Environment.Exit(0);
