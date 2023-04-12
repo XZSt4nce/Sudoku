@@ -163,8 +163,6 @@ class Program
     };
     static int[] digits_left = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
     static int digits = 81;
-    static long k = 1296000;
-    static long start = DateTime.Now.ToFileTime() / k;
     public static void Print_matrix(int[][] matrix)
     {
         Console.WriteLine("=====================================");
@@ -1062,7 +1060,7 @@ class Program
                             saved = points > 0;
                             if (x < 9 && y < 9)
                             {
-                                if (save_point.Keys.Contains("value"))
+                                if (save_point.ContainsKey("value"))
                                 {
                                     allowed_cells[x][y][(int)save_point["value"]] = false;
                                 }
