@@ -187,30 +187,17 @@ class Program
     }
     public static int[][] Input()
     {
-        //int[][] matrix = new int[9][]
-        //{
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        //};
-
         int[][] matrix = new int[9][]
         {
-            new int[9] { 0, 0, 5, 3, 0, 0, 0, 0, 0 },
-            new int[9] { 8, 0, 0, 0, 0, 0, 0, 2, 0 },
-            new int[9] { 0, 7, 0, 0, 1, 0, 5, 0, 0 },
-            new int[9] { 4, 0, 0, 0, 0, 5, 3, 0, 0 },
-            new int[9] { 0, 1, 0, 0, 7, 0, 0, 0, 6 },
-            new int[9] { 0, 0, 3, 2, 0, 0, 0, 8, 0 },
-            new int[9] { 0, 6, 0, 5, 0, 0, 0, 0, 9 },
-            new int[9] { 0, 0, 4, 0, 0, 0, 0, 3, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 9, 7, 0, 0 }
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
         };
 
         int a = 0, b = 0, value, prev_value = 0;
@@ -822,9 +809,9 @@ class Program
             {
                 for (int z = y + 1; z < 9; z++)
                 {
-                    if (matrix[x][y] == 0) continue;
-                    if (matrix[x][y] == matrix[x][z]) return false;
-                    if (matrix[y][x] == matrix[z][x]) return false;
+                    if (matrix[x][y] == 0 || matrix[y][x] == 0) continue;
+                    if (matrix[x][y] == matrix[x][z]) return true;
+                    if (matrix[y][x] == matrix[z][x]) return true;
                 }
             }
         }
@@ -839,13 +826,13 @@ class Program
                         for (int b = y; b < sub_square % 3 * 3 + 3; b++)
                         {
                             if (!(x == a && y == b) && matrix[x][y] == matrix[a][b] && matrix[x][y] != 0) 
-                                return false;
+                                return true;
                         }
                     }
                 }
             }
         }
-        return true;
+        return false;
     }
     private static void Main()
     {
