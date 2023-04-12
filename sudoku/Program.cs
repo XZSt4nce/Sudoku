@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 
 class Program
 {
@@ -161,7 +162,7 @@ class Program
         new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 }
     };
     static int[] digits_left = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
-    static int digits = 81, load = 0;
+    static int digits = 81;
     static long k = 1296000;
     static long start = DateTime.Now.ToFileTime() / k;
     public static void Print_matrix(int[][] matrix)
@@ -186,30 +187,30 @@ class Program
     }
     public static int[][] Input()
     {
-        /*int[][] matrix = new int[9][]
-        {
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        };*/
+        //int[][] matrix = new int[9][]
+        //{
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+        //};
 
         int[][] matrix = new int[9][]
         {
-            new int[9] { 0, 0, 2, 0, 0, 0, 0, 1, 9 },
-            new int[9] { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 7, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 6, 0, 0, 0, 7, 0, 3, 0, 0 },
-            new int[9] { 0, 0, 0, 4, 6, 0, 0, 0, 0 },
-            new int[9] { 0, 9, 0, 0, 0, 0, 0, 5, 0 },
-            new int[9] { 0, 0, 0, 0, 8, 5, 7, 0, 0 },
-            new int[9] { 0, 1, 0, 9, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+            new int[9] { 0, 0, 5, 3, 0, 0, 0, 0, 0 },
+            new int[9] { 8, 0, 0, 0, 0, 0, 0, 2, 0 },
+            new int[9] { 0, 7, 0, 0, 1, 0, 5, 0, 0 },
+            new int[9] { 4, 0, 0, 0, 0, 5, 3, 0, 0 },
+            new int[9] { 0, 1, 0, 0, 7, 0, 0, 0, 6 },
+            new int[9] { 0, 0, 3, 2, 0, 0, 0, 8, 0 },
+            new int[9] { 0, 6, 0, 5, 0, 0, 0, 0, 9 },
+            new int[9] { 0, 0, 4, 0, 0, 0, 0, 3, 0 },
+            new int[9] { 0, 0, 0, 0, 0, 9, 7, 0, 0 }
         };
 
         int a = 0, b = 0, value, prev_value = 0;
@@ -317,7 +318,7 @@ class Program
                     for (int j = 0; j < 9; j++)
                     {
                         allowed_cells[i][j][value] = false;
-                        pen_digits[i / 3 + j % 3][value]--;
+                        pen_digits[i / 3 + j / 3][value]--;
                     }
                 }
                 if (!allowed_columns[i][value])
@@ -325,7 +326,7 @@ class Program
                     for (int j = 0; j < 9; j++)
                     {
                         allowed_cells[j][i][value] = false;
-                        pen_digits[j / 3 + i % 3][value]--;
+                        pen_digits[j / 3 + i / 3][value]--;
                     }
                 }
                 if (!allowed_in_square[i][value])
@@ -813,99 +814,17 @@ class Program
         }
         return matrix;
     }
-    public static bool Check(int[][] matrix)
-    {
-        int row1 = 0, row2 = 0, row3 = 0;
-        int hints = 0;
-        for (int i = 0; i < 81; i++)
-        {
-            if (matrix[i % 9][i / 9] != 0)
-            {
-                hints++;
-            }
-        }
-        if (hints < 17)
-        {
-            return false;
-        }
-        else
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (i / 3 == 0)
-                    {
-                        if (matrix[i][j] != 0) row1++;
-                    }
-                    else if (i / 3 == 1)
-                    {
-                        if (matrix[i][j] != 0) row2++;
-                    }
-                    else
-                    {
-                        if (matrix[i][j] != 0) row3++;
-                    }
-                }
-            }
-            bool solvable;
-            if (row1 >= 6)
-            {
-                if (row2 >= 6) solvable = row3 >= 5;
-                else if (row2 == 5) solvable = row3 >= 6;
-                else solvable = false;
-            }
-            else if (row1 == 5)
-                solvable = row2 >= 6 && row3 >= 6;
-            else solvable = false;
-
-            if (!solvable)
-            {
-                return false;
-            }
-        }
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                for (int k = j + 1; k < 9; k++)
-                {
-                    if (matrix[i][j] == matrix[i][k] && matrix[i][j] != 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 8; j++)
-            {
-                for (int k = j + 1; k < 9; k++)
-                {
-                    if (matrix[j][i] == matrix[k][i] && matrix[j][i] != 0 ||
-                        matrix[i][j] == matrix[i][k] && matrix[i][j] != 0)
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
     public static bool Is_not_correct (int[][] matrix)
     {
-        for (int x = 0; x < 8; x++)
+        for (int x = 0; x < 9; x++)
         {
             for (int y = 0; y < 8; y++)
             {
-                for (int a = x + 1; a < 9; a++)
+                for (int z = y + 1; z < 9; z++)
                 {
-                    for (int b = y + 1; y < 9; y++)
-                    {
-                        if (matrix[x][y] == matrix[a][b] && matrix[x][y] != 0) return false;
-                        if (matrix[y][x] == matrix[b][a] && matrix[y][x] != 0) return false;
-                    }
+                    if (matrix[x][y] == 0) continue;
+                    if (matrix[x][y] == matrix[x][z]) return false;
+                    if (matrix[y][x] == matrix[z][x]) return false;
                 }
             }
         }
@@ -919,60 +838,14 @@ class Program
                     {
                         for (int b = y; b < sub_square % 3 * 3 + 3; b++)
                         {
-                            if (!(x == a && y == b) && matrix[x][y] == matrix[a][b] && matrix[x][y] != 0) return false;
+                            if (!(x == a && y == b) && matrix[x][y] == matrix[a][b] && matrix[x][y] != 0) 
+                                return false;
                         }
                     }
                 }
             }
         }
         return true;
-    }
-    public static void Loading()
-    {
-        if (start + load < DateTime.Now.ToFileTime() / k)
-        {
-            Console.Clear();
-            switch (load % 12)
-            {
-                case 0:
-                    Console.Write(" █\n▓\n▒\n░");
-                    break;
-                case 1:
-                    Console.Write(" ▓█\n▒\n░");
-                    break;
-                case 2:
-                    Console.Write(" ▒▓█\n░");
-                    break;
-                case 3:
-                    Console.Write(" ░▒▓\n    █");
-                    break;
-                case 4:
-                    Console.Write("  ░▒\n    ▓\n    █");
-                    break;
-                case 5:
-                    Console.Write("   ░\n    ▒\n    ▓\n    █");
-                    break;
-                case 6:
-                    Console.Write("\n    ░\n    ▒\n    ▓\n   █");
-                    break;
-                case 7:
-                    Console.Write("\n\n    ░\n    ▒\n  █▓");
-                    break;
-                case 8:
-                    Console.Write("\n\n\n    ░\n █▓▒");
-                    break;
-                case 9:
-                    Console.Write("\n\n\n█\n ▓▒░");
-                    break;
-                case 10:
-                    Console.Write("\n\n█\n▓\n ▒░");
-                    break;
-                case 11:
-                    Console.Write("\n█\n▓\n▒\n ░");
-                    break;
-            }
-            load++;
-        }
     }
     private static void Main()
     {
@@ -1150,62 +1023,22 @@ class Program
         };
         int[] saved_digits_left = new int[9];
         int saved_digits = 0, x, y, attempt = 0, count;
-        /*if (!Check(matrix))
+        if (digits > 64)
         {
             Console.WriteLine("The square is unsolvable");
             Environment.Exit(0);
-        }*/
-        while (digits > 0)
+        }
+        if (Is_not_correct(matrix))
+        {
+            Console.WriteLine("The square is unsolvable");
+            Environment.Exit(0);
+        }
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+        while (digits > 0 && stopwatch.ElapsedMilliseconds < 300)
         {
             tmp_digits = digits;
             matrix = Solve(matrix);
-            Loading();
-            /*if (Is_not_correct(matrix))
-            {
-                Dictionary<string, object> save_point = save_points[--points];
-                saved_allowed_cells = (bool[][][])save_point["saved_allowed_cells"];
-                saved_allowed_columns = (bool[][])save_point["saved_allowed_columns"];
-                saved_allowed_in_square = (bool[][])save_point["saved_allowed_in_square"];
-                saved_allowed_rows = (bool[][])save_point["saved_allowed_rows"];
-                saved_matrix = (int[][])save_point["saved_matrix"];
-                saved_pen_digits = (int[][])save_point["saved_pen_digits"];
-                x = (int)save_point["x"];
-                y = (int)save_point["y"];
-                for (int a = 0; a < 9; a++)
-                {
-                    for (int b = 0; b < 9; b++)
-                    {
-                        Array.Copy(saved_allowed_cells[a][b], allowed_cells[a][b], 9);
-                    }
-                    Array.Copy(saved_allowed_columns[a], allowed_columns[a], 9);
-                    Array.Copy(saved_allowed_in_square[a], allowed_in_square[a], 9);
-                    Array.Copy(saved_allowed_rows[a], allowed_rows[a], 9);
-                    Array.Copy(saved_matrix[a], matrix[a], 9);
-                    Array.Copy(saved_pen_digits[a], pen_digits[a], 9);
-                }
-                Array.Copy(saved_digits_left, digits_left, 9);
-                digits = saved_digits;
-                saved = points > 0;
-                if (x < 9 && y < 9)
-                {
-                    if (save_point.Keys.Contains("value"))
-                    {
-                        allowed_cells[x][y][(int)save_point["value"]] = false;
-                    }
-                    else
-                    {
-                        for (int value = 0; value < 9; value++)
-                        {
-                            if (allowed_cells[x][y][value])
-                            {
-                                allowed_cells[x][y][value] = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-                save_points.Remove(points);
-            }*/
             if (digits == tmp_digits)
             {
                 attempt++;
@@ -1221,41 +1054,49 @@ class Program
                         saved_allowed_rows = (bool[][])save_point["saved_allowed_rows"];
                         saved_matrix = (int[][])save_point["saved_matrix"];
                         saved_pen_digits = (int[][])save_point["saved_pen_digits"];
-                        x = (int)save_point["x"];
-                        y = (int)save_point["y"];
-                        for (int a = 0; a < 9; a++)
+                        try
                         {
-                            for (int b = 0; b < 9; b++)
+                            x = (int)save_point["x"];
+                            y = (int)save_point["y"];
+                            for (int a = 0; a < 9; a++)
                             {
-                                Array.Copy(saved_allowed_cells[a][b], allowed_cells[a][b], 9);
-                            }
-                            Array.Copy(saved_allowed_columns[a], allowed_columns[a], 9);
-                            Array.Copy(saved_allowed_in_square[a], allowed_in_square[a], 9);
-                            Array.Copy(saved_allowed_rows[a], allowed_rows[a], 9);
-                            Array.Copy(saved_matrix[a], matrix[a], 9);
-                            Array.Copy(saved_pen_digits[a], pen_digits[a], 9);
-                        }
-                        Array.Copy(saved_digits_left, digits_left, 9);
-                        digits = saved_digits;
-                        saved = points > 0;
-                        /*if (x < 9 && y < 9)
-                        {
-                            if (save_point.Keys.Contains("value"))
-                            {
-                                allowed_cells[x][y][(int)save_point["value"]] = false;
-                            }
-                            else
-                            {
-                                for (int value = 0; value < 9; value++)
+                                for (int b = 0; b < 9; b++)
                                 {
-                                    if (allowed_cells[x][y][value])
+                                    Array.Copy(saved_allowed_cells[a][b], allowed_cells[a][b], 9);
+                                }
+                                Array.Copy(saved_allowed_columns[a], allowed_columns[a], 9);
+                                Array.Copy(saved_allowed_in_square[a], allowed_in_square[a], 9);
+                                Array.Copy(saved_allowed_rows[a], allowed_rows[a], 9);
+                                Array.Copy(saved_matrix[a], matrix[a], 9);
+                                Array.Copy(saved_pen_digits[a], pen_digits[a], 9);
+                            }
+                            Array.Copy(saved_digits_left, digits_left, 9);
+                            digits = saved_digits;
+                            saved = points > 0;
+                            if (x < 9 && y < 9)
+                            {
+                                if (save_point.Keys.Contains("value"))
+                                {
+                                    allowed_cells[x][y][(int)save_point["value"]] = false;
+                                }
+                                else
+                                {
+                                    for (int value = 0; value < 9; value++)
                                     {
-                                        allowed_cells[x][y][value] = false;
-                                        break;
+                                        if (allowed_cells[x][y][value])
+                                        {
+                                            allowed_cells[x][y][value] = false;
+                                            break;
+                                        }
                                     }
                                 }
                             }
-                        }*/
+                        }
+                        catch (System.Collections.Generic.KeyNotFoundException)
+                        {
+                            Console.WriteLine("The square is unsolvable");
+                            Environment.Exit(0);
+                        }
                         save_points.Remove(points);
                     }
                     else
@@ -1310,8 +1151,8 @@ class Program
                                             for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
                                             allowed_rows[x][value] = false;
                                             allowed_columns[y][value] = false;
-                                            allowed_in_square[x / 3 * 3 + y % 3 * 3][value] = false;
-                                            pen_digits[x / 3 * 3 + y % 3 * 3][value] = 0;
+                                            allowed_in_square[x / 3 * 3 + y / 3][value] = false;
+                                            pen_digits[x / 3 * 3 + y / 3][value] = 0;
                                             digits_left[value]--;
                                             digits--;
                                             break;
@@ -1351,8 +1192,8 @@ class Program
                                                     for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
                                                     allowed_rows[x][value] = false;
                                                     allowed_columns[y][value] = false;
-                                                    allowed_in_square[x / 3 * 3 + y % 3 * 3][value] = false;
-                                                    pen_digits[x / 3 * 3 + y % 3 * 3][value] = 0;
+                                                    allowed_in_square[x / 3 * 3 + y / 3][value] = false;
+                                                    pen_digits[x / 3 * 3 + y / 3][value] = 0;
                                                     digits_left[value]--;
                                                     digits--;
                                                     not_found = false;
@@ -1370,8 +1211,14 @@ class Program
             }
             else attempt = 0;
         }
-        Console.Clear();
+        stopwatch.Stop();
+        if (stopwatch.ElapsedMilliseconds >= 300)
+        {
+            Console.WriteLine("The square is unsolvable");
+            Environment.Exit(0);
+        }
         Console.WriteLine("Solved sudoku:");
         Print_matrix(matrix);
+        Environment.Exit(0);
     }
 }
