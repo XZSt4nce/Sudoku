@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 class Program
 {
@@ -1033,7 +1030,7 @@ class Program
             new bool[9]
         };
         int[] saved_digits_left = new int[9];
-        int saved_digits = 0, x, y, attempt = 0, count;
+        int saved_digits = 0, x, y, attempt = 0;
         if (digits > 64)
         {
             Console.WriteLine("The square is unsolvable");
@@ -1053,7 +1050,7 @@ class Program
             if (digits == tmp_digits)
             {
                 attempt++;
-                if (attempt == 3)
+                if (attempt == 3 || Is_not_correct(matrix))
                 {
                     attempt = 0;
                     if (saved && Is_not_correct(matrix))
@@ -1086,24 +1083,17 @@ class Program
                             saved = points > 0;
                             if (x < 9 && y < 9)
                             {
-                                if (save_point.ContainsKey("value"))
+                                for (int value = 0; value < 9; value++)
                                 {
-                                    allowed_cells[x][y][(int)save_point["value"]] = false;
-                                }
-                                else
-                                {
-                                    for (int value = 0; value < 9; value++)
+                                    if (allowed_cells[x][y][value])
                                     {
-                                        if (allowed_cells[x][y][value])
-                                        {
-                                            allowed_cells[x][y][value] = false;
-                                            break;
-                                        }
+                                        allowed_cells[x][y][value] = false;
+                                        break;
                                     }
                                 }
                             }
                         }
-                        catch (System.Collections.Generic.KeyNotFoundException)
+                        catch (KeyNotFoundException)
                         {
                             Console.WriteLine("The square is unsolvable");
                             Environment.Exit(0);
@@ -1144,82 +1134,28 @@ class Program
                         {
                             for (y = 0; y < 9 && not_found; y++)
                             {
-                                count = 0;
                                 for (int value = 0; value < 9; value++)
                                 {
-                                    if (allowed_cells[x][y][value]) count++;
-                                }
-                                if (count == 2)
-                                {
-                                    save_point.Add("x", x);
-                                    save_point.Add("y", y);
-                                    not_found = false;
-                                    for (int value = 0; value < 9; value++)
+                                    if (allowed_cells[x][y][value])
                                     {
-                                        if (allowed_cells[x][y][value])
-                                        {
-                                            matrix[x][y] = value + 1;
-                                            Console.Clear();
-                                            Print_matrix(matrix);
-                                            for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
-                                            allowed_rows[x][value] = false;
-                                            allowed_columns[y][value] = false;
-                                            allowed_in_square[x / 3 * 3 + y / 3][value] = false;
-                                            pen_digits[x / 3 * 3 + y / 3][value] = 0;
-                                            digits_left[value]--;
-                                            digits--;
-                                            break;
-                                        }
+                                        save_point.Add("x", x);
+                                        save_point.Add("y", y);
+                                        matrix[x][y] = value + 1;
+                                        Console.Clear();
+                                        Print_matrix(matrix);
+                                        for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
+                                        allowed_rows[x][value] = false;
+                                        allowed_columns[y][value] = false;
+                                        allowed_in_square[x / 3 * 3 + y / 3][value] = false;
+                                        pen_digits[x / 3 * 3 + y / 3][value] = 0;
+                                        digits_left[value]--;
+                                        digits--;
+                                        not_found = false;
+                                        save_points.Add(points++, save_point);
+                                        break;
                                     }
                                 }
                             }
-                        }
-                        if (save_point.ContainsKey("x"))
-                            save_points.Add(points++, save_point);
-                        else
-                        {
-                            not_found = true;
-                            for (int value = 0; value < 9 && not_found; value++)
-                            {
-                                for (int sub_square = 0; sub_square < 9 && not_found; sub_square++)
-                                {
-                                    count = 0;
-                                    for (x = sub_square / 3 * 3; x < sub_square / 3 * 3 + 3; x++)
-                                    {
-                                        for (y = sub_square % 3 * 3; y < sub_square % 3 * 3 + 3; y++)
-                                        {
-                                            if (allowed_cells[x][y][value]) count++;
-                                        }
-                                    }
-                                    if (count == 2)
-                                    {
-                                        for (x = sub_square / 3 * 3; x < sub_square / 3 * 3 + 3 && not_found; x++)
-                                        {
-                                            for (y = sub_square % 3 * 3; y < sub_square % 3 * 3 + 3 && not_found; y++)
-                                            {
-                                                if (allowed_cells[x][y][value])
-                                                {
-                                                    save_point.Add("x", x);
-                                                    save_point.Add("y", y);
-                                                    matrix[x][y] = value + 1;
-                                                    Console.Clear();
-                                                    Print_matrix(matrix);
-                                                    for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
-                                                    allowed_rows[x][value] = false;
-                                                    allowed_columns[y][value] = false;
-                                                    allowed_in_square[x / 3 * 3 + y / 3][value] = false;
-                                                    pen_digits[x / 3 * 3 + y / 3][value] = 0;
-                                                    digits_left[value]--;
-                                                    digits--;
-                                                    not_found = false;
-                                                }
-                                            }
-                                        }
-                                        save_point.Add("value", value);
-                                    }
-                                }
-                            }
-                            save_points.Add(points++, save_point);
                         }
                     }
                 }
