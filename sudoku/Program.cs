@@ -987,6 +987,7 @@ class Program
         Console.Clear();
         Console.WriteLine("Solved sudoku:");
         Print_matrix(matrix);
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
         Environment.Exit(0);
     }
 }
