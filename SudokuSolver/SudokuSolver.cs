@@ -4,40 +4,7 @@ using System.Diagnostics;
 
 class SudokuSolver
 {
-    static bool[][] allowed_rows = new bool[9][] {
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true }
-        };
-    static bool[][] allowed_columns = new bool[9][] {
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true }
-        };
-    static bool[][] allowed_in_square = new bool[9][] {
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true },
-            new bool[9] { true, true, true, true, true, true, true, true, true }
-        };
-    static bool[][][] allowed_cells = new bool[9][][]
+    private bool[][][] m_allowedCells = new bool[9][][]
     {
         new bool[9][]
         {
@@ -148,7 +115,68 @@ class SudokuSolver
             new bool[9] { true, true, true, true, true, true, true, true, true },
         }
     };
-    static int[][] pen_digits = new int[9][]
+    private bool[][] m_allowedRows = new bool[9][]
+    {
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true }
+    };
+    private bool[][] m_allowedColumns = new bool[9][]
+    {
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true }
+    };
+    private bool[][] m_allowedInSubSquare = new bool[9][]
+    {
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true },
+        new bool[9] { true, true, true, true, true, true, true, true, true }
+    };
+    private bool m_saved = false;
+    //private int[][] m_matrix = new int[9][]
+    //{
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    //    new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    //};
+    private int[][] m_matrix = new int[9][]
+    {
+        new int[9] { 0, 0, 0, 0, 0, 3, 0, 7, 4 },
+        new int[9] { 8, 0, 0, 6, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 9, 0 },
+        new int[9] { 0, 6, 0, 8, 0, 0, 2, 0, 0 },
+        new int[9] { 0, 0, 9, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 5, 0, 0, 0, 0 },
+        new int[9] { 2, 8, 0, 0, 0, 0, 6, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 9, 1, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 7, 0, 0, 0, 0 }
+    };
+    private int[][] m_penDigits = new int[9][]
     {
         new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
         new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
@@ -160,17 +188,77 @@ class SudokuSolver
         new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 },
         new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 }
     };
-    static int[] digits_left = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
-    static int digits = 81;
-    public static void Print_matrix(int[][] matrix)
+    private int[] m_digitsLeft = new int[9] { 9, 9, 9, 9, 9, 9, 9, 9, 9 };
+    private int m_allDigits = 81, m_points = 0;
+    Dictionary<int, Dictionary<string, object>> m_savePoints = new Dictionary<int, Dictionary<string, object>>();
+
+    public SudokuSolver() { }
+
+    public bool[][][] AllowedCells
     {
+        get { return m_allowedCells; }
+    }
+
+    public bool[][] AllowedRows
+    {
+        get { return m_allowedRows; }
+    }
+
+    public bool[][] AllowedColumns
+    {
+        get { return m_allowedColumns; }
+    }
+
+    public bool[][] AllowedInSubSquare
+    {
+        get { return m_allowedInSubSquare; }
+    }
+
+    public bool Saved
+    {
+        get { return m_saved; }
+    }
+
+    public int[][] Matrix
+    {
+        get { return m_matrix; }
+    }
+    
+    public int[][] PenDigits
+    {
+        get { return m_penDigits; }
+    }
+
+    public int[] DigitsLeft
+    {
+        get { return m_digitsLeft; }
+    }
+
+    public int AllDigits
+    {
+        get { return m_allDigits; }
+    }
+
+    public int Points
+    {
+        get { return m_points; }
+    }
+
+    public Dictionary<int, Dictionary<string, object>> SavePoints
+    {
+        get { return m_savePoints; }
+    }
+
+    public void PrintMatrix()
+    {
+        int value;
         Console.WriteLine("=====================================");
         for (int i = 0; i < 9; i++)
         {
             Console.Write("▌ ");
             for (int j = 0; j < 9; j++)
             {
-                int value = matrix[i][j];
+                value = m_matrix[i][j];
                 if (value == 0) Console.Write(" ");
                 else if (value == 10) Console.Write("^");
                 else Console.Write(value);
@@ -179,26 +267,13 @@ class SudokuSolver
             }
             if (i % 3 == 2) Console.WriteLine("\n=====================================");
             else Console.WriteLine("\n-------------------------------------");
-
         }
     }
-    public static int[][] Input_9()
-    {
-        int[][] matrix = new int[9][]
-        {
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        };
 
-        int a = 0, b = 0, value, prev_value = 0;
-        matrix[a][b] = 10;
+    public void Input()
+    {
+        int value, row_index = 0, column_index = 0, previous_value = 0;
+        m_matrix[row_index][column_index] = 10;
         ConsoleKeyInfo key = new ConsoleKeyInfo();
         while (key.Key != ConsoleKey.Enter)
         {
@@ -206,587 +281,569 @@ class SudokuSolver
             Console.WriteLine("Use the WASD buttons or arrows to move through the cells.");
             Console.WriteLine("To clear the cell, press Backspace");
             Console.WriteLine("To finish filling, press Enter.");
-            prev_value = matrix[a][b];
-            if (prev_value == 10) prev_value = 0;
-            matrix[a][b] = 10;
-            Print_matrix(matrix);
+            previous_value = m_matrix[row_index][column_index];
+            if (previous_value == 10) previous_value = 0;
+            m_matrix[row_index][column_index] = 10;
+            PrintMatrix();
             Console.CursorVisible = false;
             key = Console.ReadKey(true);
             Console.CursorVisible = true;
             value = Convert.ToInt32(key.KeyChar) - 48;
             if (key.Key == ConsoleKey.W || key.Key == ConsoleKey.UpArrow)
             {
-                matrix[a][b] = prev_value;
-                if (a != 0) a--;
-                else a = 8;
+                m_matrix[row_index][column_index] = previous_value;
+                if (row_index != 0) row_index--;
+                else row_index = 8;
             }
             if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
             {
-                matrix[a][b] = prev_value;
-                if (a != 8) a++;
-                else a = 0;
+                m_matrix[row_index][column_index] = previous_value;
+                if (row_index != 8) row_index++;
+                else row_index = 0;
             }
             if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.RightArrow)
             {
-                matrix[a][b] = prev_value;
-                if (b != 8) b++;
-                else b = 0;
+                m_matrix[row_index][column_index] = previous_value;
+                if (column_index != 8) column_index++;
+                else column_index = 0;
             }
             if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
             {
-                matrix[a][b] = prev_value;
-                if (b != 0) b--;
-                else b = 8;
+                m_matrix[row_index][column_index] = previous_value;
+                if (column_index != 0) column_index--;
+                else column_index = 8;
             }
             if (value >= 0 && value < 10)
             {
-                matrix[a][b] = value;
-                if (b == 8)
+                m_matrix[row_index][column_index] = value;
+                if (column_index == 8)
                 {
-                    b = 0;
-                    a++;
-                    a %= 9;
+                    column_index = 0;
+                    row_index++;
+                    row_index %= 9;
                 }
-                else b++;
+                else column_index++;
             }
             Console.Clear();
         }
-        matrix[a][b] = prev_value;
-        for (int i = 0; i < 9; i++)
+        m_matrix[row_index][column_index] = previous_value;
+        for (int row = 0; row < 9; row++)
         {
-            for (int j = 0; j < 9; j++)
+            for (int column = 0; column < 9; column++)
             {
-                if (matrix[i][j] != 0)
+                value = m_matrix[row][column] - 1;
+                if (value >= 0)
                 {
-                    allowed_rows[i][matrix[i][j] - 1] = false;
-                    allowed_in_square[i / 3 * 3 + j / 3][matrix[i][j] - 1] = false;
-                    pen_digits[i / 3 * 3 + j / 3][matrix[i][j] - 1]--;
-                    allowed_columns[j][matrix[i][j] - 1] = false;
-                    for (int k = 0; k < 9; k++)
+                    m_allowedRows[row][value] = false;
+                    m_allowedInSubSquare[row / 3 * 3 + column / 3][value] = false;
+                    m_penDigits[row / 3 * 3 + column / 3][value] = 0;
+                    m_allowedColumns[column][value] = false;
+                    for (int values = 0; values < 9; values++)
                     {
-                        allowed_cells[i][j][k] = false;
-                        allowed_cells[i][k][matrix[i][j] - 1] = false;
-                        allowed_cells[k][j][matrix[i][j] - 1] = false;
+                        m_allowedCells[row][column][values] = false;
+                        m_allowedCells[row][values][value] = false;
+                        m_allowedCells[values][column][value] = false;
                     }
-                    digits_left[matrix[i][j] - 1]--;
-                    digits--;
+                    m_digitsLeft[value]--;
+                    m_allDigits--;
                 }
             }
         }
-        return matrix;
     }
-    public static int[][] Solve(int[][] matrix)
+
+    public void SetPens()
     {
-        int count, value;
-        bool not_found;
-        for (value = 0; value < 9; value++)
+        int count;
+        for (int sub_square = 0; sub_square < 9; sub_square++)
         {
-            if (digits_left[value] > 0) continue;
-            for (int i = 0; i < 9; i++)
+            for (int value = 0; value < 9; value++)
             {
-                allowed_in_square[i][value] = false;
-                allowed_columns[i][value] = false;
-                allowed_rows[i][value] = false;
-                for (int j = 0; j < 9; j++)
+                if (PenDigits[sub_square][value] == 0) continue;
+                count = 0;
+                for (int row = sub_square / 3 * 3; row < sub_square / 3 * 3 + 3; row++)
                 {
-                    allowed_cells[i][j][value] = false;
+                    for (int column = sub_square % 3 * 3; column < sub_square % 3 * 3 + 3; column++)
+                    {
+                        if (AllowedCells[row][column][value])
+                        {
+                            count++;
+                        }
+                    }
+                }
+                m_penDigits[sub_square][value] = count;
+            }
+        }
+    }
+
+    public void ProhibitNullNumbers()
+    {
+        for (int value = 0; value < 9; value++)
+        {
+            if (m_digitsLeft[value] == 0)
+            {
+                for (int i = 0; i < 9; i++)
+                {
+                    m_allowedInSubSquare[i][value] = false;
+                    m_allowedColumns[i][value] = false;
+                    m_allowedRows[i][value] = false;
+                    m_penDigits[i][value] = 0;
+                    for (int j = 0; j < 9; j++)
+                    {
+                        m_allowedCells[i][j][value] = false;
+                    }
                 }
             }
         }
+    }
+
+    public void ProhibitCells()
+    {
         for (int i = 0; i < 9; i++)
         {
-            for (value = 0; value < 9; value++)
+            for (int value = 0; value < 9; value++)
             {
-                if (!allowed_rows[i][value])
-                {
-                    for (int j = 0; j < 9; j++)
-                    {
-                        allowed_cells[i][j][value] = false;
-                        pen_digits[i / 3 + j / 3][value]--;
-                    }
-                }
-                if (!allowed_columns[i][value])
-                {
-                    for (int j = 0; j < 9; j++)
-                    {
-                        allowed_cells[j][i][value] = false;
-                        pen_digits[j / 3 + i / 3][value]--;
-                    }
-                }
-                if (!allowed_in_square[i][value])
+                if (!m_allowedInSubSquare[i][value])
                 {
                     for (int a = i / 3 * 3; a < i / 3 * 3 + 3; a++)
                     {
                         for (int b = i % 3 * 3; b < i % 3 * 3 + 3; b++)
                         {
-                            allowed_cells[a][b][value] = false;
+                            m_allowedCells[a][b][value] = false;
+                        }
+                    }
+                }
+            }
+            for (int value = 0; value < 9; value++)
+            {
+                if (!m_allowedRows[i][value])
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        m_allowedCells[i][j][value] = false;
+                    }
+                }
+                if (!m_allowedColumns[i][value])
+                {
+                    for (int j = 0; j < 9; j++)
+                    {
+                        m_allowedCells[j][i][value] = false;
+                    }
+                }
+            }
+        }
+    }
+
+    public void ProhibitOneChildRowAndColumn()
+    {
+        bool not_found;
+        int count;
+        for (int value = 0; value < 9; value++)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (m_allowedRows[i * 3][value] && m_allowedRows[i * 3 + 1][value] ||
+                    m_allowedRows[i * 3][value] && m_allowedRows[i * 3 + 2][value] ||
+                    m_allowedRows[i * 3 + 1][value] && m_allowedRows[i * 3 + 2][value])
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (!m_allowedInSubSquare[i * 3 + j][value]) continue;
+                        count = 0;
+                        for (int a = i * 3; a < i * 3 + 3; a++)
+                        {
+                            for (int b = j * 3; b < j * 3 + 3; b++)
+                            {
+                                if (m_matrix[a][b] == 0 && m_allowedRows[a][value] && m_allowedColumns[b][value] && m_allowedCells[a][b][value])
+                                {
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (count == 1)
+                        {
+                            not_found = true;
+                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
+                            {
+                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
+                                {
+                                    if (m_matrix[a][b] == 0 && m_allowedRows[a][value] && m_allowedColumns[b][value] && m_allowedCells[a][b][value])
+                                    {
+                                        for (int c = 0; c < j * 3; c++) m_allowedCells[a][c][value] = false;
+                                        for (int c = j * 3 + 3; c < 9; c++) m_allowedCells[a][c][value] = false;
+                                        not_found = false;
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (m_allowedColumns[i * 3][value] && m_allowedColumns[i * 3 + 1][value] ||
+                    m_allowedColumns[i * 3][value] && m_allowedColumns[i * 3 + 2][value] ||
+                    m_allowedColumns[i * 3 + 1][value] && m_allowedColumns[i * 3 + 2][value])
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (!m_allowedInSubSquare[j * 3 + i][value]) continue;
+                        count = 0;
+                        for (int a = i * 3; a < i * 3 + 3; a++)
+                        {
+                            for (int b = j * 3; b < j * 3 + 3; b++)
+                            {
+                                if (m_matrix[b][a] == 0 && m_allowedColumns[a][value] && m_allowedRows[b][value] && m_allowedCells[b][a][value])
+                                {
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (count == 1)
+                        {
+                            not_found = true;
+                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
+                            {
+                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
+                                {
+                                    if (m_matrix[b][a] == 0 && m_allowedColumns[a][value] && m_allowedRows[b][value] && m_allowedCells[b][a][value])
+                                    {
+                                        for (int c = 0; c < j * 3; c++) m_allowedCells[c][a][value] = false;
+                                        for (int c = j * 3 + 3; c < 9; c++) m_allowedCells[c][a][value] = false;
+                                        not_found = false;
+                                    }
+                                }
+                            }
+                            break;
                         }
                     }
                 }
             }
         }
-        for (value = 0; value < 9; value++)
+    }
+
+    public void ExcludeValuesInRowsAndColumns()
+    {
+        for (int value = 0; value < 9; value++)
         {
-            for (int i = 0; i < 3; i++)
-            {
-                if (allowed_rows[i * 3][value] && allowed_rows[i * 3 + 1][value] ||
-                    allowed_rows[i * 3][value] && allowed_rows[i * 3 + 2][value] ||
-                    allowed_rows[i * 3 + 1][value] && allowed_rows[i * 3 + 2][value])
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (!allowed_in_square[i * 3 + j][value]) continue;
-                        count = 0;
-                        for (int a = i * 3; a < i * 3 + 3; a++)
-                        {
-                            for (int b = j * 3; b < j * 3 + 3; b++)
-                            {
-                                if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value] && allowed_cells[a][b][value])
-                                {
-                                    count++;
-                                    break;
-                                }
-                            }
-                        }
-                        if (count == 1)
-                        {
-                            not_found = true;
-                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
-                            {
-                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
-                                {
-                                    if (matrix[a][b] == 0 && allowed_rows[a][value] && allowed_columns[b][value] && allowed_cells[a][b][value])
-                                    {
-                                        for (int c = 0; c < j * 3; c++) allowed_cells[a][c][value] = false;
-                                        for (int c = j * 3 + 3; c < 9; c++) allowed_cells[a][c][value] = false;
-                                        not_found = false;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-                if (allowed_columns[i * 3][value] && allowed_columns[i * 3 + 1][value] ||
-                    allowed_columns[i * 3][value] && allowed_columns[i * 3 + 2][value] ||
-                    allowed_columns[i * 3 + 1][value] && allowed_columns[i * 3 + 2][value])
-                {
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (!allowed_in_square[j * 3 + i][value]) continue;
-                        count = 0;
-                        for (int a = i * 3; a < i * 3 + 3; a++)
-                        {
-                            for (int b = j * 3; b < j * 3 + 3; b++)
-                            {
-                                if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value] && allowed_cells[b][a][value])
-                                {
-                                    count++;
-                                    break;
-                                }
-                            }
-                        }
-                        if (count == 1)
-                        {
-                            not_found = true;
-                            for (int a = i * 3; a < i * 3 + 3 && not_found; a++)
-                            {
-                                for (int b = j * 3; b < j * 3 + 3 && not_found; b++)
-                                {
-                                    if (matrix[b][a] == 0 && allowed_columns[a][value] && allowed_rows[b][value] && allowed_cells[b][a][value])
-                                    {
-                                        for (int c = 0; c < j * 3; c++) allowed_cells[c][a][value] = false;
-                                        for (int c = j * 3 + 3; c < 9; c++) allowed_cells[c][a][value] = false;
-                                        not_found = false;
-                                    }
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-            }
             for (int row = 0; row < 9; row++)
             {
-                if (allowed_cells[row][0][value] || allowed_cells[row][1][value] || allowed_cells[row][2][value])
+                if (m_allowedCells[row][0][value] || m_allowedCells[row][1][value] || m_allowedCells[row][2][value])
                 {
-                    if (allowed_cells[row][3][value] || allowed_cells[row][4][value] || allowed_cells[row][5][value]) continue;
-                    if (allowed_cells[row][6][value] || allowed_cells[row][7][value] || allowed_cells[row][8][value]) continue;
+                    if (m_allowedCells[row][3][value] || m_allowedCells[row][4][value] || m_allowedCells[row][5][value]) continue;
+                    if (m_allowedCells[row][6][value] || m_allowedCells[row][7][value] || m_allowedCells[row][8][value]) continue;
                     for (int a = row / 3 * 3; a < row; a++)
                     {
-                        allowed_cells[a][0][value] = false;
-                        allowed_cells[a][1][value] = false;
-                        allowed_cells[a][2][value] = false;
+                        m_allowedCells[a][0][value] = false;
+                        m_allowedCells[a][1][value] = false;
+                        m_allowedCells[a][2][value] = false;
                     }
                     for (int a = row + 1; a < row / 3 * 3 + 3; a++)
                     {
-                        allowed_cells[a][0][value] = false;
-                        allowed_cells[a][1][value] = false;
-                        allowed_cells[a][2][value] = false;
+                        m_allowedCells[a][0][value] = false;
+                        m_allowedCells[a][1][value] = false;
+                        m_allowedCells[a][2][value] = false;
                     }
                 }
-                else if (allowed_cells[row][3][value] || allowed_cells[row][4][value] || allowed_cells[row][5][value])
+                else if (m_allowedCells[row][3][value] || m_allowedCells[row][4][value] || m_allowedCells[row][5][value])
                 {
-                    if (allowed_cells[row][6][value] || allowed_cells[row][7][value] || allowed_cells[row][8][value]) continue;
+                    if (m_allowedCells[row][6][value] || m_allowedCells[row][7][value] || m_allowedCells[row][8][value]) continue;
                     for (int a = row / 3 * 3; a < row; a++)
                     {
-                        allowed_cells[a][3][value] = false;
-                        allowed_cells[a][4][value] = false;
-                        allowed_cells[a][5][value] = false;
+                        m_allowedCells[a][3][value] = false;
+                        m_allowedCells[a][4][value] = false;
+                        m_allowedCells[a][5][value] = false;
                     }
                     for (int a = row + 1; a < row / 3 * 3 + 3; a++)
                     {
-                        allowed_cells[a][3][value] = false;
-                        allowed_cells[a][4][value] = false;
-                        allowed_cells[a][5][value] = false;
+                        m_allowedCells[a][3][value] = false;
+                        m_allowedCells[a][4][value] = false;
+                        m_allowedCells[a][5][value] = false;
                     }
                 }
-                else if (allowed_cells[row][6][value] || allowed_cells[row][7][value] || allowed_cells[row][8][value])
+                else if (m_allowedCells[row][6][value] || m_allowedCells[row][7][value] || m_allowedCells[row][8][value])
                 {
                     for (int a = row / 3 * 3; a < row; a++)
                     {
-                        allowed_cells[a][6][value] = false;
-                        allowed_cells[a][7][value] = false;
-                        allowed_cells[a][8][value] = false;
+                        m_allowedCells[a][6][value] = false;
+                        m_allowedCells[a][7][value] = false;
+                        m_allowedCells[a][8][value] = false;
                     }
                     for (int a = row + 1; a < row / 3 * 3 + 3; a++)
                     {
-                        allowed_cells[a][6][value] = false;
-                        allowed_cells[a][7][value] = false;
-                        allowed_cells[a][8][value] = false;
+                        m_allowedCells[a][6][value] = false;
+                        m_allowedCells[a][7][value] = false;
+                        m_allowedCells[a][8][value] = false;
                     }
                 }
             }
             for (int column = 0; column < 9; column++)
             {
-                if (allowed_cells[0][column][value] || allowed_cells[1][column][value] || allowed_cells[2][column][value])
+                if (m_allowedCells[0][column][value] || m_allowedCells[1][column][value] || m_allowedCells[2][column][value])
                 {
-                    if (allowed_cells[3][column][value] || allowed_cells[4][column][value] || allowed_cells[5][column][value]) continue;
-                    if (allowed_cells[6][column][value] || allowed_cells[7][column][value] || allowed_cells[8][column][value]) continue;
+                    if (m_allowedCells[3][column][value] || m_allowedCells[4][column][value] || m_allowedCells[5][column][value]) continue;
+                    if (m_allowedCells[6][column][value] || m_allowedCells[7][column][value] || m_allowedCells[8][column][value]) continue;
                     for (int a = column / 3 * 3; a < column; a++)
                     {
-                        allowed_cells[0][a][value] = false;
-                        allowed_cells[1][a][value] = false;
-                        allowed_cells[2][a][value] = false;
+                        m_allowedCells[0][a][value] = false;
+                        m_allowedCells[1][a][value] = false;
+                        m_allowedCells[2][a][value] = false;
                     }
                     for (int a = column + 1; a < column / 3 * 3 + 3; a++)
                     {
-                        allowed_cells[0][a][value] = false;
-                        allowed_cells[1][a][value] = false;
-                        allowed_cells[2][a][value] = false;
+                        m_allowedCells[0][a][value] = false;
+                        m_allowedCells[1][a][value] = false;
+                        m_allowedCells[2][a][value] = false;
                     }
                 }
-                else if (allowed_cells[3][column][value] || allowed_cells[4][column][value] || allowed_cells[5][column][value])
+                else if (m_allowedCells[3][column][value] || m_allowedCells[4][column][value] || m_allowedCells[5][column][value])
                 {
-                    if (allowed_cells[6][column][value] || allowed_cells[7][column][value] || allowed_cells[8][column][value]) continue;
+                    if (m_allowedCells[6][column][value] || m_allowedCells[7][column][value] || m_allowedCells[8][column][value]) continue;
                     for (int a = column / 3 * 3; a < column; a++)
                     {
-                        allowed_cells[3][a][value] = false;
-                        allowed_cells[4][a][value] = false;
-                        allowed_cells[5][a][value] = false;
+                        m_allowedCells[3][a][value] = false;
+                        m_allowedCells[4][a][value] = false;
+                        m_allowedCells[5][a][value] = false;
                     }
                     for (int a = column + 1; a < column / 3 * 3 + 3; a++)
                     {
-                        allowed_cells[3][a][value] = false;
-                        allowed_cells[4][a][value] = false;
-                        allowed_cells[5][a][value] = false;
+                        m_allowedCells[3][a][value] = false;
+                        m_allowedCells[4][a][value] = false;
+                        m_allowedCells[5][a][value] = false;
                     }
                 }
-                else if (allowed_cells[6][column][value] || allowed_cells[7][column][value] || allowed_cells[8][column][value])
+                else if (m_allowedCells[6][column][value] || m_allowedCells[7][column][value] || m_allowedCells[8][column][value])
                 {
                     for (int a = column / 3 * 3; a < column; a++)
                     {
-                        allowed_cells[6][a][value] = false;
-                        allowed_cells[7][a][value] = false;
-                        allowed_cells[8][a][value] = false;
+                        m_allowedCells[6][a][value] = false;
+                        m_allowedCells[7][a][value] = false;
+                        m_allowedCells[8][a][value] = false;
                     }
                     for (int a = column + 1; a < column / 3 * 3 + 3; a++)
                     {
-                        allowed_cells[6][a][value] = false;
-                        allowed_cells[7][a][value] = false;
-                        allowed_cells[8][a][value] = false;
+                        m_allowedCells[6][a][value] = false;
+                        m_allowedCells[7][a][value] = false;
+                        m_allowedCells[8][a][value] = false;
                     }
                 }
             }
         }
-        for (int i = 0; i < 9; i++)
-        {
-            count = 0;
-            for (int j = 0; j < 9; j++)
-            {
-                if (allowed_in_square[i][j]) count++;
-            }
-            if (count == 1)
-            {
-                value = 0;
-                for (int j = 0; j < 9; j++)
-                {
-                    if (allowed_in_square[i][j])
-                    {
-                        value = j;
-                        break;
-                    }
-                }
-                not_found = true;
-                for (int j = i % 3 * 3; j < i % 3 * 3 + 3 && not_found; j++)
-                {
-                    for (int k = i / 3 * 3; k < i / 3 * 3 + 3 && not_found; k++)
-                    {
-                        if (matrix[k][j] == 0)
-                        {
-                            matrix[k][j] = value + 1;
-                            Console.Clear();
-                            allowed_rows[k][value] = false;
-                            allowed_columns[j][value] = false;
-                            allowed_cells[k][j][value] = false;
-                            for (int v = 0; v < 9; v++) allowed_cells[k][j][v] = false;
-                            allowed_in_square[i][value] = false;
-                            pen_digits[i][value] = 0;
-                            digits_left[value]--;
-                            digits--;
-                            not_found = false;
-                        }
-                    }
-                }
-            }
+    }
 
-            count = 0;
-            for (int j = 0; j < 9; j++)
-            {
-                if (allowed_rows[i][j]) count++;
-            }
-            if (count == 1)
-            {
-                value = 0;
-                for (int j = 0; j < 9; j++)
-                {
-                    if (allowed_rows[i][j])
-                    {
-                        value = j;
-                        break;
-                    }
-                }
-                not_found = true;
-                for (int j = 0; j < 9 && not_found; j++)
-                {
-                    if (matrix[i][j] == 0)
-                    {
-                        matrix[i][j] = value + 1;
-                        allowed_rows[i][value] = false;
-                        allowed_columns[j][value] = false;
-                        allowed_cells[i][j][value] = false;
-                        for (int v = 0; v < 9; v++) allowed_cells[i][j][v] = false;
-                        allowed_in_square[i / 3 * 3 + j / 3][value] = false;
-                        pen_digits[i / 3 * 3 + j / 3][value] = 0;
-                        digits_left[value]--;
-                        digits--;
-                        not_found = false;
-                    }
-                }
-            }
-
-            count = 0;
-            for (int j = 0; j < 9; j++)
-            {
-                if (allowed_columns[i][j]) count++;
-            }
-            if (count == 1)
-            {
-                value = 0;
-                for (int j = 0; j < 9; j++)
-                {
-                    if (allowed_columns[i][j])
-                    {
-                        value = j;
-                        break;
-                    }
-                }
-                not_found = true;
-                for (int j = 0; j < 9 && not_found; j++)
-                {
-                    if (matrix[j][i] == 0)
-                    {
-                        matrix[j][i] = value + 1;
-                        allowed_rows[j][value] = false;
-                        allowed_columns[i][value] = false;
-                        for (int v = 0; v < 9; v++) allowed_cells[j][i][v] = false;
-                        allowed_in_square[j / 3 * 3 + i / 3][value] = false;
-                        pen_digits[j / 3 * 3 + i / 3][value] = 0;
-                        digits_left[value]--;
-                        digits--;
-                        not_found = false;
-                    }
-                }
-            }
-
-            count = 0;
-            for (int j = 0; j < 9; j++)
-            {
-                if (allowed_in_square[i][j]) count++;
-            }
-            if (count == 1)
-            {
-                not_found = true;
-                for (int j = 0; j < 9; j++)
-                {
-                    if (allowed_in_square[i][j]) value = j;
-                }
-                for (int j = i / 3 * 3; j < i / 3 * 3 + 3 && not_found; j++)
-                {
-                    for (int k = i % 3 * 3; k < i % 3 * 3 + 3 && not_found; k++)
-                    {
-                        if (matrix[j][k] == 0)
-                        {
-                            matrix[j][k] = value + 1;
-                            allowed_rows[j][value] = false;
-                            allowed_columns[k][value] = false;
-                            for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
-                            allowed_in_square[i][value] = false;
-                            pen_digits[i][value] = 0;
-                            digits_left[value]--;
-                            digits--;
-                            not_found = false;
-                        }
-                    }
-                }
-            }
-        }
+    public void RemainingInSubSquare()
+    {
+        int count, value = 0;
         for (int sub_square = 0; sub_square < 9; sub_square++)
         {
             count = 0;
-            for (int j = 0; j < 9; j++)
+            for (int values = 0; values < 9; values++)
             {
-                if (allowed_in_square[sub_square][j]) count++;
+                if (m_allowedInSubSquare[sub_square][values])
+                {
+                    count++;
+                    value = values;
+                }
             }
             if (count == 1)
             {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (allowed_in_square[sub_square][j]) value = j;
-                }
-                not_found = true;
-                for (int j = sub_square / 3 * 3; j < sub_square / 3 * 3 + 3 && not_found; j++)
-                {
-                    for (int k = sub_square % 3 * 3; k < sub_square % 3 * 3 + 3 && not_found; k++)
-                    {
-                        if (matrix[j][k] == 0)
-                        {
-                            matrix[j][k] = value + 1;
-                            for (int v = 0; v < 9; v++) allowed_cells[j][k][v] = false;
-                            allowed_rows[j][value] = false;
-                            allowed_columns[k][value] = false;
-                            allowed_in_square[sub_square][value] = false;
-                            pen_digits[sub_square][value] = 0;
-                            digits_left[value]--;
-                            digits--;
-                            not_found = false;
-                        }
-                    }
-                }
-            }
-
-            for (value = 0; value < 9; value++)
-            {
-                if (!allowed_in_square[sub_square][value]) continue;
-                int[][] probable = new int[9][];
-                int ptr = 0;
                 for (int row = sub_square / 3 * 3; row < sub_square / 3 * 3 + 3; row++)
                 {
                     for (int column = sub_square % 3 * 3; column < sub_square % 3 * 3 + 3; column++)
                     {
-                        if (allowed_cells[row][column][value] && allowed_columns[column][value] && allowed_rows[row][value])
+                        if (m_matrix[row][column] == 0)
                         {
-                            probable[ptr] = new int[2] { row, column };
-                            ptr++;
+                            m_matrix[row][column] = value + 1;
+                            m_allowedRows[row][value] = false;
+                            m_allowedColumns[column][value] = false;
+                            m_allowedCells[row][column][value] = false;
+                            for (int values = 0; values < 9; values++) m_allowedCells[row][column][values] = false;
+                            m_allowedInSubSquare[sub_square][value] = false;
+                            m_penDigits[sub_square][value] = 0;
+                            m_digitsLeft[value]--;
+                            m_allDigits--;
+                            break;
                         }
                     }
                 }
-                if (ptr == 1)
+            }
+        }
+    }
+
+    public void RemainingInRow()
+    {
+        int count, value = 0;
+        for (int row = 0; row < 9; row++)
+        {
+            count = 0;
+            for (int values = 0; values < 9; values++)
+            {
+                if (m_allowedRows[row][values])
                 {
-                    matrix[probable[0][0]][probable[0][1]] = value + 1;
-                    for (int v = 0; v < 9; v++) allowed_cells[probable[0][0]][probable[0][1]][v] = false;
-                    allowed_rows[probable[0][0]][value] = false;
-                    allowed_columns[probable[0][1]][value] = false;
-                    allowed_in_square[sub_square][value] = false;
-                    pen_digits[sub_square][value] = 0;
-                    digits_left[value]--;
-                    digits--;
+                    count++;
+                    value = values;
+                }
+            }
+            if (count == 1)
+            {
+                for (int column = 0; column < 9; column++)
+                {
+                    if (m_matrix[row][column] == 0)
+                    {
+                        m_matrix[row][column] = value + 1;
+                        m_allowedRows[row][value] = false;
+                        m_allowedColumns[column][value] = false;
+                        m_allowedCells[row][column][value] = false;
+                        for (int values = 0; values < 9; values++) m_allowedCells[row][column][values] = false;
+                        m_allowedInSubSquare[row / 3 * 3 + column / 3][value] = false;
+                        m_penDigits[row / 3 * 3 + column / 3][value] = 0;
+                        m_digitsLeft[value]--;
+                        m_allDigits--;
+                        break;
+                    }
                 }
             }
         }
-        for (int i = 0; i < 9; i++)
+    }
+
+    public void RemainingInColumn()
+    {
+        int count, value = 0;
+        for (int column = 0; column < 9; column++)
         {
-            for (int j = 0; j < 9; j++)
+            count = 0;
+            for (int values = 0; values < 9; values++)
             {
-                int last = 0;
-                count = 0;
-                for (value = 0; value < 9; value++)
+                if (m_allowedColumns[column][values])
                 {
-                    if (allowed_cells[i][j][value])
+                    count++;
+                    value = values;
+                }
+            }
+            if (count == 1)
+            {
+                for (int row = 0; row < 9; row++)
+                {
+                    if (m_matrix[row][column] == 0)
+                    {
+                        m_matrix[row][column] = value + 1;
+                        m_allowedRows[row][value] = false;
+                        m_allowedColumns[column][value] = false;
+                        for (int values = 0; values < 9; values++) m_allowedCells[row][column][values] = false;
+                        m_allowedInSubSquare[row / 3 * 3 + column / 3][value] = false;
+                        m_penDigits[row / 3 * 3 + column / 3][value] = 0;
+                        m_digitsLeft[value]--;
+                        m_allDigits--;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void RemainingInCell()
+    {
+        int count, value = 0;
+        for (int row = 0; row < 9; row++)
+        {
+            for (int column = 0; column < 9; column++)
+            {
+                count = 0;
+                for (int values = 0; values < 9; values++)
+                {
+                    if (AllowedCells[row][column][values])
                     {
                         count++;
-                        last = value;
+                        value = values;
                     }
                 }
                 if (count == 1)
                 {
-                    matrix[i][j] = last + 1;
-                    for (int v = 0; v < 9; v++) allowed_cells[i][j][v] = false;
-                    allowed_rows[i][last] = false;
-                    allowed_columns[j][last] = false;
-                    allowed_in_square[i / 3 * 3 + j / 3][last] = false;
-                    pen_digits[i / 3 * 3 + j / 3][last] = 0;
-                    digits_left[last]--;
-                    digits--;
+                    m_matrix[row][column] = value + 1;
+                    m_allowedRows[row][value] = false;
+                    m_allowedColumns[column][value] = false;
+                    for (int values = 0; values < 9; values++) m_allowedCells[row][column][values] = false;
+                    m_allowedInSubSquare[row / 3 * 3 + column / 3][value] = false;
+                    m_penDigits[row / 3 * 3 + column / 3][value] = 0;
+                    m_digitsLeft[value]--;
+                    m_allDigits--;
                 }
             }
         }
-        for (int i = 0; i < 9; i++)
+    }
+
+    public void LastInSubSquare()
+    {
+        for (int sub_square = 0; sub_square < 9; sub_square++)
         {
-            for (int j = 0; j < 9; j++)
+            for (int value = 0; value < 9; value++)
             {
-                count = 0;
-                for (int a = i / 3 * 3; a < i / 3 * 3 + 3; a++)
+                if (m_allowedInSubSquare[sub_square][value])
                 {
-                    for (int b = i % 3 * 3; b < i % 3 * 3 + 3; b++)
+                    if (m_penDigits[sub_square][value] == 1)
                     {
-                        if (allowed_cells[a][b][j]) count++;
-                    }
-                }
-                pen_digits[i][j] = count;
-            }
-            for (int j = 0; j < 8; j++)
-            {
-                if (!allowed_in_square[i][j]) continue;
-                for (int k = j + 1; k < 9; k++)
-                {
-                    if (pen_digits[i][j] == 2
-                        && pen_digits[i][k] == 2
-                        && allowed_in_square[i][k])
-                    {
-                        bool same = true;
-                        for (int a = i / 3 * 3; a < i / 3 * 3 + 3 && same; a++)
+                        bool not_found = true;
+                        int row = 0, column = 0;
+                        for (row = sub_square / 3 * 3; row < sub_square / 3 * 3 + 3 && not_found; row++)
                         {
-                            for (int b = i % 3 * 3; b < i % 3 * 3 + 3 && same; b++)
+                            for (column = sub_square % 3 * 3; column < sub_square % 3 * 3 + 3 && not_found; column++)
                             {
-                                if (allowed_cells[a][b][j])
-                                {
-                                    if (!allowed_cells[a][b][k]) same = false;
-                                }
-                                else if (allowed_cells[a][b][k]) same = false;
+                                if (m_allowedCells[row][column][value]) not_found = false;
                             }
                         }
-                        if (same)
+                        row--; column--;
+                        m_matrix[row][column] = value + 1;
+                        for (int values = 0; values < 9; values++) m_allowedCells[row][column][values] = false;
+                        m_allowedRows[row][value] = false;
+                        m_allowedColumns[column][value] = false;
+                        m_allowedInSubSquare[sub_square][value] = false;
+                        m_penDigits[sub_square][value] = 0;
+                        m_digitsLeft[value]--;
+                        m_allDigits--;
+                    }
+                }
+            }
+        }
+    }
+
+    public void LeaveTwoPensInTheSubSquare()
+    {
+        bool same_cells;
+        for (int sub_square = 0; sub_square < 9; sub_square++)
+        {
+            for (int first_value = 0; first_value < 8; first_value++)
+            {
+                if (m_allowedInSubSquare[sub_square][first_value])
+                {
+                    for (int second_value = first_value + 1; second_value < 9; second_value++)
+                    {
+                        if (m_penDigits[sub_square][first_value] == 2
+                            && m_penDigits[sub_square][second_value] == 2
+                            && m_allowedInSubSquare[sub_square][second_value])
                         {
-                            for (int a = i / 3 * 3; a < i / 3 * 3 + 3 && same; a++)
+                            same_cells = true;
+                            for (int row = sub_square / 3 * 3; row < sub_square / 3 * 3 + 3 && same_cells; row++)
                             {
-                                for (int b = i % 3 * 3; b < i % 3 * 3 + 3 && same; b++)
+                                for (int column = sub_square % 3 * 3; column < sub_square % 3 * 3 + 3 && same_cells; column++)
                                 {
-                                    if (allowed_cells[a][b][j])
+                                    if (m_allowedCells[row][column][first_value])
                                     {
-                                        for (int c = 0; c < 9; c++)
+                                        if (!m_allowedCells[row][column][second_value]) same_cells = false;
+                                    }
+                                    else if (m_allowedCells[row][column][second_value]) same_cells = false;
+                                }
+                            }
+                            if (same_cells)
+                            {
+                                for (int a = sub_square / 3 * 3; a < sub_square / 3 * 3 + 3 && same_cells; a++)
+                                {
+                                    for (int b = sub_square % 3 * 3; b < sub_square % 3 * 3 + 3 && same_cells; b++)
+                                    {
+                                        if (m_allowedCells[a][b][first_value])
                                         {
-                                            if (c != j && c != k) allowed_cells[a][b][c] = false;
+                                            for (int c = 0; c < 9; c++)
+                                            {
+                                                if (c != first_value && c != second_value) m_allowedCells[a][b][c] = false;
+                                            }
                                         }
                                     }
                                 }
@@ -796,34 +853,45 @@ class SudokuSolver
                 }
             }
         }
-        return matrix;
     }
-    public static bool Is_not_correct(int[][] matrix)
+
+    public bool IsNotCorrect()
     {
-        for (int x = 0; x < 9; x++)
+        for (int row = 0; row < 9; row++)
         {
-            for (int y = 0; y < 8; y++)
+            for (int first_column = 0; first_column < 8; first_column++)
             {
-                for (int z = y + 1; z < 9; z++)
+                for (int second_column = first_column + 1; second_column < 9; second_column++)
                 {
-                    if (matrix[x][y] == 0 || matrix[y][x] == 0) continue;
-                    if (matrix[x][y] == matrix[x][z]) return true;
-                    if (matrix[y][x] == matrix[z][x]) return true;
+                    if (m_matrix[row][first_column] == m_matrix[row][second_column] &&
+                        m_matrix[row][first_column] != 0)
+                    {
+                        return true;
+                    }
+                    if (m_matrix[first_column][row] == m_matrix[second_column][row] &&
+                        m_matrix[first_column][row] != 0) 
+                    { 
+                        return true; 
+                    }
                 }
             }
         }
         for (int sub_square = 0; sub_square < 9; sub_square++)
         {
-            for (int x = sub_square / 3 * 3; x < sub_square / 3 * 3 + 2; x++)
+            for (int first_row = sub_square / 3 * 3; first_row < sub_square / 3 * 3 + 2; first_row++)
             {
-                for (int y = sub_square % 3 * 3; y < sub_square % 3 * 3 + 2; y++)
+                for (int first_column = sub_square % 3 * 3; first_column < sub_square % 3 * 3 + 2; first_column++)
                 {
-                    for (int a = x; a < sub_square / 3 * 3 + 3; a++)
+                    for (int second_row = first_row; second_row < sub_square / 3 * 3 + 3; second_row++)
                     {
-                        for (int b = y; b < sub_square % 3 * 3 + 3; b++)
+                        for (int second_column = first_column; second_column < sub_square % 3 * 3 + 3; second_column++)
                         {
-                            if (!(x == a && y == b) && matrix[x][y] == matrix[a][b] && matrix[x][y] != 0)
+                            if (!(first_row == second_row && first_column == second_column) &&
+                                m_matrix[first_row][first_column] == m_matrix[second_row][second_column] &&
+                                m_matrix[first_row][first_column] != 0)
+                            {
                                 return true;
+                            }
                         }
                     }
                 }
@@ -831,148 +899,165 @@ class SudokuSolver
         }
         return false;
     }
+
+    public void Savepoint()
+    {
+        int x, y;
+        if (Saved && IsNotCorrect())
+        {
+            Dictionary<string, object> save_point = m_savePoints[--m_points];
+            bool[][][] saved_allowed_cells = (bool[][][])save_point["saved_allowed_cells"];
+            bool[][] saved_allowed_columns = (bool[][])save_point["saved_allowed_columns"];
+            bool[][] saved_allowed_in_sub_square = (bool[][])save_point["saved_allowed_in_sub_square"];
+            bool[][] saved_allowed_rows = (bool[][])save_point["saved_allowed_rows"];
+            int[][] saved_matrix = (int[][])save_point["saved_matrix"];
+            int[][] saved_pen_digits = (int[][])save_point["saved_pen_digits"];
+            int[] saved_digits_left = (int[])save_point["saved_digits_left"];
+            int saved_digits = (int)save_point["saved_digits"];
+            try
+            {
+                x = (int)save_point["x"];
+                y = (int)save_point["y"];
+                for (int a = 0; a < 9; a++)
+                {
+                    for (int b = 0; b < 9; b++)
+                    {
+                        Array.Copy(saved_allowed_cells[a][b], m_allowedCells[a][b], 9);
+                    }
+                    Array.Copy(saved_allowed_columns[a], m_allowedColumns[a], 9);
+                    Array.Copy(saved_allowed_in_sub_square[a], m_allowedInSubSquare[a], 9);
+                    Array.Copy(saved_allowed_rows[a], m_allowedRows[a], 9);
+                    Array.Copy(saved_matrix[a], m_matrix[a], 9);
+                    Array.Copy(saved_pen_digits[a], m_penDigits[a], 9);
+                }
+                Array.Copy(saved_digits_left, m_digitsLeft, 9);
+                m_allDigits = saved_digits;
+                m_saved = m_points > 0;
+                if (x < 9 && y < 9)
+                {
+                    for (int value = 0; value < 9; value++)
+                    {
+                        if (m_allowedCells[x][y][value])
+                        {
+                            m_allowedCells[x][y][value] = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine("The square is unsolvable");
+                Environment.Exit(0);
+            }
+            m_savePoints.Remove(m_points);
+        }
+        else
+        {
+            Dictionary<string, object> save_point = new Dictionary<string, object>()
+            {
+                { "saved_allowed_cells", new bool[9][][] },
+                { "saved_allowed_columns", new bool[9][] },
+                { "saved_allowed_in_sub_square", new bool[9][] },
+                { "saved_allowed_rows", new bool[9][] },
+                { "saved_matrix", new int[9][] },
+                { "saved_pen_digits", new int[9][] },
+                { "saved_digits_left", new int[9] },
+                { "saved_digits", m_allDigits }
+            };
+            for (int a = 0; a < 9; a++)
+            {
+                ((bool[][][])save_point["saved_allowed_cells"])[a] = new bool[9][];
+                ((bool[][])save_point["saved_allowed_columns"])[a] = new bool[9];
+                ((bool[][])save_point["saved_allowed_in_sub_square"])[a] = new bool[9];
+                ((bool[][])save_point["saved_allowed_rows"])[a] = new bool[9];
+                ((int[][])save_point["saved_matrix"])[a] = new int[9];
+                ((int[][])save_point["saved_pen_digits"])[a] = new int[9];
+                for (int b = 0; b < 9; b++)
+                {
+                    ((bool[][][])save_point["saved_allowed_cells"])[a][b] = new bool[9];
+                    for (int c = 0; c < 9; c++)
+                    {
+                        ((bool[][][])save_point["saved_allowed_cells"])[a][b][c] = m_allowedCells[a][b][c];
+                    }
+                    ((bool[][])save_point["saved_allowed_columns"])[a][b] = m_allowedColumns[a][b];
+                    ((bool[][])save_point["saved_allowed_in_sub_square"])[a][b] = m_allowedInSubSquare[a][b];
+                    ((bool[][])save_point["saved_allowed_rows"])[a][b] = m_allowedRows[a][b];
+                    ((int[][])save_point["saved_matrix"])[a][b] = m_matrix[a][b];
+                    ((int[][])save_point["saved_pen_digits"])[a][b] = m_penDigits[a][b];
+                }
+                ((int[])save_point["saved_digits_left"])[a] = m_digitsLeft[a];
+            }
+            bool not_found = true;
+            for (x = 0; x < 9 && not_found; x++)
+            {
+                for (y = 0; y < 9 && not_found; y++)
+                {
+                    for (int value = 0; value < 9 && not_found; value++)
+                    {
+                        if (m_allowedCells[x][y][value])
+                        {
+                            save_point.Add("x", x);
+                            save_point.Add("y", y);
+                            m_matrix[x][y] = value + 1;
+                            for (int v = 0; v < 9; v++) m_allowedCells[x][y][v] = false;
+                            m_allowedRows[x][value] = false;
+                            m_allowedColumns[y][value] = false;
+                            m_allowedInSubSquare[x / 3 * 3 + y / 3][value] = false;
+                            m_penDigits[x / 3 * 3 + y / 3][value] = 0;
+                            m_digitsLeft[value]--;
+                            m_allDigits--;
+                            not_found = false;
+                            m_saved = true;
+                            m_savePoints.Add(m_points++, save_point);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private static void Main()
     {
-        Dictionary<int, Dictionary<string, object>> save_points = new Dictionary<int, Dictionary<string, object>>();
-        int points = 0, tmp_digits, x, y, attempt = 0;
-        int[][] matrix = Input_9();
-        bool saved = false, not_found;
-        if (digits > 64)
+        SudokuSolver solver = new SudokuSolver();
+        solver.Input();
+        bool is_not_correct = false;
+        int tmp_digits, attempt = 0;
+        if (solver.AllDigits > 64)
         {
             Console.WriteLine("The square is unsolvable");
             Environment.Exit(0);
         }
-        if (Is_not_correct(matrix))
+        if (solver.IsNotCorrect())
         {
             Console.WriteLine("The square is unsolvable");
             Environment.Exit(0);
         }
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        while ((digits > 0 || Is_not_correct(matrix)) && stopwatch.ElapsedMilliseconds < 100)
+        while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 100)
         {
-            tmp_digits = digits;
-            Console.Clear();
-            matrix = Solve(matrix);
-            if (digits == tmp_digits)
+            tmp_digits = solver.AllDigits;
+            solver.SetPens();
+            solver.ProhibitNullNumbers();
+            solver.ProhibitCells();
+            solver.ProhibitOneChildRowAndColumn();
+            solver.ExcludeValuesInRowsAndColumns();
+            solver.RemainingInSubSquare();
+            solver.RemainingInRow();
+            solver.RemainingInColumn();
+            solver.RemainingInCell();
+            solver.LastInSubSquare();
+            solver.LeaveTwoPensInTheSubSquare();
+            is_not_correct = solver.IsNotCorrect();
+            if (solver.AllDigits == tmp_digits || is_not_correct)
             {
                 attempt++;
-                if (attempt == 3 || Is_not_correct(matrix))
+                if (attempt == 3 || is_not_correct)
                 {
                     attempt = 0;
-                    if (saved && Is_not_correct(matrix))
-                    {
-                        Dictionary<string, object> save_point = save_points[--points];
-                        bool[][][] saved_allowed_cells = (bool[][][])save_point["saved_allowed_cells"];
-                        bool[][] saved_allowed_columns = (bool[][])save_point["saved_allowed_columns"];
-                        bool[][] saved_allowed_in_square = (bool[][])save_point["saved_allowed_in_square"];
-                        bool[][] saved_allowed_rows = (bool[][])save_point["saved_allowed_rows"];
-                        int[][] saved_matrix = (int[][])save_point["saved_matrix"];
-                        int[][] saved_pen_digits = (int[][])save_point["saved_pen_digits"];
-                        int[] saved_digits_left = (int[])save_point["saved_digits_left"];
-                        int saved_digits = (int)save_point["saved_digits"];
-                        try
-                        {
-                            x = (int)save_point["x"];
-                            y = (int)save_point["y"];
-                            for (int a = 0; a < 9; a++)
-                            {
-                                for (int b = 0; b < 9; b++)
-                                {
-                                    Array.Copy(saved_allowed_cells[a][b], allowed_cells[a][b], 9);
-                                }
-                                Array.Copy(saved_allowed_columns[a], allowed_columns[a], 9);
-                                Array.Copy(saved_allowed_in_square[a], allowed_in_square[a], 9);
-                                Array.Copy(saved_allowed_rows[a], allowed_rows[a], 9);
-                                Array.Copy(saved_matrix[a], matrix[a], 9);
-                                Array.Copy(saved_pen_digits[a], pen_digits[a], 9);
-                            }
-                            Array.Copy(saved_digits_left, digits_left, 9);
-                            digits = saved_digits;
-                            saved = points > 0;
-                            if (x < 9 && y < 9)
-                            {
-                                for (int value = 0; value < 9; value++)
-                                {
-                                    if (allowed_cells[x][y][value])
-                                    {
-                                        allowed_cells[x][y][value] = false;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        catch (KeyNotFoundException)
-                        {
-                            Console.WriteLine("The square is unsolvable");
-                            Environment.Exit(0);
-                        }
-                        save_points.Remove(points);
-                    }
-                    else
-                    {
-                        Dictionary<string, object> save_point = new Dictionary<string, object>()
-                        {
-                            { "saved_allowed_cells", new bool[9][][] },
-                            { "saved_allowed_columns", new bool[9][] },
-                            { "saved_allowed_in_square", new bool[9][] },
-                            { "saved_allowed_rows", new bool[9][] },
-                            { "saved_matrix", new int[9][] },
-                            { "saved_pen_digits", new int[9][] },
-                            { "saved_digits_left", new int[9] },
-                            { "saved_digits", digits }
-                        };
-                        for (int a = 0; a < 9; a++)
-                        {
-                            ((bool[][][])save_point["saved_allowed_cells"])[a] = new bool[9][];
-                            ((bool[][])save_point["saved_allowed_columns"])[a] = new bool[9];
-                            ((bool[][])save_point["saved_allowed_in_square"])[a] = new bool[9];
-                            ((bool[][])save_point["saved_allowed_rows"])[a] = new bool[9];
-                            ((int[][])save_point["saved_matrix"])[a] = new int[9];
-                            ((int[][])save_point["saved_pen_digits"])[a] = new int[9];
-                            for (int b = 0; b < 9; b++)
-                            {
-                                ((bool[][][])save_point["saved_allowed_cells"])[a][b] = new bool[9];
-                                for (int c = 0; c < 9; c++)
-                                {
-                                    ((bool[][][])save_point["saved_allowed_cells"])[a][b][c] = allowed_cells[a][b][c];
-                                }
-                                ((bool[][])save_point["saved_allowed_columns"])[a][b] = allowed_columns[a][b];
-                                ((bool[][])save_point["saved_allowed_in_square"])[a][b] = allowed_in_square[a][b];
-                                ((bool[][])save_point["saved_allowed_rows"])[a][b] = allowed_rows[a][b];
-                                ((int[][])save_point["saved_matrix"])[a][b] = matrix[a][b];
-                                ((int[][])save_point["saved_pen_digits"])[a][b] = pen_digits[a][b];
-                            }
-                            ((int[])save_point["saved_digits_left"])[a] = digits_left[a];
-                        }
-                        saved = true;
-                        not_found = true;
-                        for (x = 0; x < 9 && not_found; x++)
-                        {
-                            for (y = 0; y < 9 && not_found; y++)
-                            {
-                                for (int value = 0; value < 9; value++)
-                                {
-                                    if (allowed_cells[x][y][value])
-                                    {
-                                        save_point.Add("x", x);
-                                        save_point.Add("y", y);
-                                        matrix[x][y] = value + 1;
-                                        for (int v = 0; v < 9; v++) allowed_cells[x][y][v] = false;
-                                        allowed_rows[x][value] = false;
-                                        allowed_columns[y][value] = false;
-                                        allowed_in_square[x / 3 * 3 + y / 3][value] = false;
-                                        pen_digits[x / 3 * 3 + y / 3][value] = 0;
-                                        digits_left[value]--;
-                                        digits--;
-                                        not_found = false;
-                                        save_points.Add(points++, save_point);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    solver.Savepoint();
+                    is_not_correct = solver.IsNotCorrect();
                 }
             }
             else attempt = 0;
@@ -985,7 +1070,8 @@ class SudokuSolver
         }
         Console.Clear();
         Console.WriteLine("Solved sudoku:");
-        Print_matrix(matrix);
+        solver.PrintMatrix();
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
         Environment.Exit(0);
     }
 }
