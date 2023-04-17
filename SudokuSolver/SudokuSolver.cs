@@ -339,6 +339,34 @@ class SudokuSolver
         }
     }
 
+    public void Input(int[][] matrix)
+    {
+        int value;
+        m_matrix = matrix;
+        for (int row = 0; row < 9; row++)
+        {
+            for (int column = 0; column < 9; column++)
+            {
+                value = m_matrix[row][column] - 1;
+                if (value >= 0)
+                {
+                    m_allowedRows[row][value] = false;
+                    m_allowedInSubSquare[row / 3 * 3 + column / 3][value] = false;
+                    m_penDigits[row / 3 * 3 + column / 3][value] = 0;
+                    m_allowedColumns[column][value] = false;
+                    for (int values = 0; values < 9; values++)
+                    {
+                        m_allowedCells[row][column][values] = false;
+                        m_allowedCells[row][values][value] = false;
+                        m_allowedCells[values][column][value] = false;
+                    }
+                    m_digitsLeft[value]--;
+                    m_allDigits--;
+                }
+            }
+        }
+    }
+
     public void SetPens()
     {
         int count;
