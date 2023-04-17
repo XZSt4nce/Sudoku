@@ -153,7 +153,19 @@ namespace Sudoku
         new bool[9] { true, true, true, true, true, true, true, true, true },
         new bool[9] { true, true, true, true, true, true, true, true, true }
         };
-        private bool m_saved = false;
+        private bool m_saved = false, m_solved = false;
+        private int[][] m_startMatrix = new int[9][]
+        {
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+        new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+        };
         private int[][] m_matrix = new int[9][]
         {
         new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -209,6 +221,16 @@ namespace Sudoku
             get { return m_saved; }
         }
 
+        public bool Solved
+        {
+            get { return m_solved; } set { m_solved = value; }
+        }
+
+        public int[][] StartMatrix
+        {
+            get { return m_startMatrix; }
+        }
+
         public int[][] Matrix
         {
             get { return m_matrix; }
@@ -248,10 +270,12 @@ namespace Sudoku
                 Console.Write("▌ ");
                 for (int j = 0; j < 9; j++)
                 {
+                    if (m_startMatrix[i][j] != m_matrix[i][j] && m_solved) Console.ForegroundColor = ConsoleColor.Cyan;
                     value = m_matrix[i][j];
                     if (value == 0) Console.Write(" ");
                     else if (value == 10) Console.Write("^");
                     else Console.Write(value);
+                    Console.ForegroundColor = ConsoleColor.White;
                     if (j % 3 == 2) Console.Write(" ▌ ");
                     else Console.Write(" | ");
                 }
@@ -321,6 +345,7 @@ namespace Sudoku
             {
                 for (int column = 0; column < 9; column++)
                 {
+                    m_startMatrix[row][column] = m_matrix[row][column];
                     value = m_matrix[row][column] - 1;
                     if (value >= 0)
                     {
@@ -344,6 +369,7 @@ namespace Sudoku
         public void Input(int[][] matrix)
         {
             int value;
+            m_startMatrix = matrix;
             m_matrix = matrix;
             for (int row = 0; row < 9; row++)
             {
@@ -1037,6 +1063,7 @@ namespace Sudoku
 
         private static void Main()
         {
+            Console.Title = "Sudoku Solver";
             SudokuSolver solver = new SudokuSolver();
             solver.Input();
             bool is_not_correct = false;
@@ -1086,6 +1113,7 @@ namespace Sudoku
                 Console.WriteLine("The square is unsolvable");
                 Environment.Exit(0);
             }
+            solver.Solved = true;
             Console.Clear();
             Console.WriteLine("Solved sudoku:");
             solver.PrintMatrix();
