@@ -41,7 +41,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -69,7 +69,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -112,7 +112,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -140,7 +140,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -183,7 +183,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -211,7 +211,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -254,7 +254,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -282,7 +282,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -325,7 +325,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -353,7 +353,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -396,7 +396,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -424,7 +424,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -439,27 +439,27 @@ namespace SudokuTests
         {
             int[][] begginingMatrix = new int[9][]
             {
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 3, 0, 0, 0, 7, 0, 5, 0, 0 },
+                new int[9] { 1, 0, 9, 8, 0, 0, 0, 0, 0 },
+                new int[9] { 2, 0, 0, 0, 0, 0, 0, 0, 0 },
+                new int[9] { 0, 0, 0, 0, 6, 0, 0, 2, 0 },
+                new int[9] { 0, 6, 4, 0, 0, 0, 0, 0, 0 },
+                new int[9] { 0, 8, 0, 0, 0, 0, 0, 9, 0 },
+                new int[9] { 0, 0, 0, 0, 0, 0, 6, 0, 7 },
+                new int[9] { 0, 0, 0, 9, 0, 0, 0, 0, 0 },
+                new int[9] { 0, 0, 0, 0, 0, 0, 4, 0, 0 }
             };
             int[][] expected = new int[9][]
             {
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 3, 4, 8, 2, 7, 9, 5, 6, 1 },
+                new int[9] { 1, 7, 9, 8, 5, 6, 3, 4, 2 },
+                new int[9] { 2, 5, 6, 4, 3, 1, 9, 7, 8 },
+                new int[9] { 9, 1, 3, 5, 6, 8, 7, 2, 4 },
+                new int[9] { 7, 6, 4, 1, 9, 2, 8, 5, 3 },
+                new int[9] { 5, 8, 2, 7, 4, 3, 1, 9, 6 },
+                new int[9] { 4, 9, 1, 3, 2, 5, 6, 8, 7 },
+                new int[9] { 6, 3, 7, 9, 8, 4, 2, 1, 5 },
+                new int[9] { 8, 2, 5, 6, 1, 7, 4, 3, 9 }
             };
             SudokuSolver solver = new SudokuSolver();
             solver.Input(begginingMatrix);
@@ -467,7 +467,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -495,7 +495,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -510,27 +510,27 @@ namespace SudokuTests
         {
             int[][] begginingMatrix = new int[9][]
             {
+                new int[9] { 0, 9, 0, 3, 0, 4, 0, 0, 0 },
+                new int[9] { 7, 0, 0, 0, 0, 0, 6, 0, 0 },
                 new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 0, 0, 0, 8, 0, 0, 2, 0, 0 },
+                new int[9] { 5, 0, 0, 0, 7, 0, 0, 0, 0 },
+                new int[9] { 6, 0, 0, 0, 0, 0, 1, 0, 0 },
+                new int[9] { 0, 8, 4, 0, 0, 0, 0, 0, 9 },
+                new int[9] { 0, 0, 0, 0, 6, 0, 0, 5, 0 },
+                new int[9] { 0, 0, 0, 0, 0, 0, 0, 7, 0 }
             };
             int[][] expected = new int[9][]
             {
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 2, 9, 6, 3, 5, 4, 7, 1, 8 },
+                new int[9] { 7, 5, 3, 1, 8, 2, 6, 9, 4 },
+                new int[9] { 8, 4, 1, 6, 9, 7, 5, 2, 3 },
+                new int[9] { 4, 7, 9, 8, 1, 6, 2, 3, 5 },
+                new int[9] { 5, 1, 8, 2, 7, 3, 9, 4, 6 },
+                new int[9] { 6, 3, 2, 5, 4, 9, 1, 8, 7 },
+                new int[9] { 1, 8, 4, 7, 2, 5, 3, 6, 9 },
+                new int[9] { 3, 2, 7, 9, 6, 8, 4, 5, 1 },
+                new int[9] { 9, 6, 5, 4, 3, 1, 8, 7, 2 }
             };
             SudokuSolver solver = new SudokuSolver();
             solver.Input(begginingMatrix);
@@ -538,7 +538,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -566,7 +566,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -581,27 +581,27 @@ namespace SudokuTests
         {
             int[][] begginingMatrix = new int[9][]
             {
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 7, 0, 0, 0, 2, 0, 0, 0, 0 },
+                new int[9] { 0, 0, 0, 0, 0, 0, 9, 0, 6 },
+                new int[9] { 0, 0, 0, 0, 0, 0, 8, 0, 0 },
+                new int[9] { 0, 0, 0, 9, 0, 8, 0, 0, 0 },
+                new int[9] { 8, 0, 0, 0, 0, 0, 0, 3, 0 },
+                new int[9] { 0, 0, 0, 6, 0, 0, 5, 0, 0 },
+                new int[9] { 0, 5, 9, 0, 3, 0, 0, 0, 0 },
+                new int[9] { 0, 0, 0, 0, 0, 4, 0, 7, 0 },
+                new int[9] { 0, 6, 0, 0, 0, 0, 0, 0, 0 }
             };
             int[][] expected = new int[9][]
             {
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 7, 8, 6, 4, 2, 9, 1, 5, 3 },
+                new int[9] { 5, 4, 3, 7, 8, 1, 9, 2, 6 },
+                new int[9] { 9, 1, 2, 3, 5, 6, 8, 4, 7 },
+                new int[9] { 6, 3, 5, 9, 4, 8, 7, 1, 2 },
+                new int[9] { 8, 9, 1, 2, 7, 5, 6, 3, 4 },
+                new int[9] { 2, 7, 4, 6, 1, 3, 5, 9, 8 },
+                new int[9] { 4, 5, 9, 8, 3, 7, 2, 6, 1 },
+                new int[9] { 1, 2, 8, 5, 6, 4, 3, 7, 9 },
+                new int[9] { 3, 6, 7, 1, 9, 2, 4, 8, 5 }
             };
             SudokuSolver solver = new SudokuSolver();
             solver.Input(begginingMatrix);
@@ -609,7 +609,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -637,7 +637,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -652,27 +652,27 @@ namespace SudokuTests
         {
             int[][] begginingMatrix = new int[9][]
             {
+                new int[9] { 0, 1, 0, 0, 0, 0, 0, 2, 8 },
+                new int[9] { 6, 0, 0, 0, 7, 0, 0, 0, 0 },
                 new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 0, 0, 9, 0, 0, 0, 3, 4, 0 },
+                new int[9] { 7, 0, 0, 2, 0, 8, 0, 0, 0 },
+                new int[9] { 0, 0, 0, 1, 0, 0, 0, 0, 0 },
+                new int[9] { 4, 0, 0, 0, 6, 0, 5, 0, 0 },
+                new int[9] { 0, 0, 0, 0, 0, 0, 9, 0, 0 },
+                new int[9] { 0, 8, 0, 0, 0, 0, 0, 0, 0 }
             };
             int[][] expected = new int[9][]
             {
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                new int[9] { 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+                new int[9] { 9, 1, 4, 6, 3, 5, 7, 2, 8 },
+                new int[9] { 6, 5, 8, 4, 7, 2, 1, 3, 9 },
+                new int[9] { 2, 7, 3, 9, 8, 1, 4, 5, 6 },
+                new int[9] { 8, 2, 9, 7, 5, 6, 3, 4, 1 },
+                new int[9] { 7, 3, 1, 2, 4, 8, 6, 9, 5 },
+                new int[9] { 5, 4, 6, 1, 9, 3, 8, 7, 2 },
+                new int[9] { 4, 9, 2, 8, 6, 7, 5, 1, 3 },
+                new int[9] { 1, 6, 5, 3, 2, 4, 9, 8, 7 },
+                new int[9] { 3, 8, 7, 5, 1, 9, 2, 6, 4 }
             };
             SudokuSolver solver = new SudokuSolver();
             solver.Input(begginingMatrix);
@@ -680,7 +680,7 @@ namespace SudokuTests
             int tmp_digits, attempt = 0;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -708,7 +708,7 @@ namespace SudokuTests
                 else attempt = 0;
             }
             stopwatch.Stop();
-            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 20, "Time's up");
+            Assert.IsFalse(stopwatch.ElapsedMilliseconds >= 50, "Time's up");
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)

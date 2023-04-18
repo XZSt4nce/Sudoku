@@ -274,8 +274,15 @@ namespace Sudoku
                     value = m_matrix[i][j];
                     if (value == 0) Console.Write(" ");
                     else if (value == 10) Console.Write("^");
+                    else if (value > 10)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.BackgroundColor = ConsoleColor.White;
+                        Console.Write(value - 10);
+                    }
                     else Console.Write(value);
                     Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Black;
                     if (j % 3 == 2) Console.Write(" ▌ ");
                     else Console.Write(" | ");
                 }
@@ -286,8 +293,8 @@ namespace Sudoku
 
         public void Input()
         {
+            Console.CursorVisible = false;
             int value, row_index = 0, column_index = 0, previous_value = 0;
-            m_matrix[row_index][column_index] = 10;
             ConsoleKeyInfo key = new ConsoleKeyInfo();
             while (key.Key != ConsoleKey.Enter)
             {
@@ -296,12 +303,9 @@ namespace Sudoku
                 Console.WriteLine("To clear the cell, press Backspace");
                 Console.WriteLine("To finish filling, press Enter.");
                 previous_value = m_matrix[row_index][column_index];
-                if (previous_value == 10) previous_value = 0;
-                m_matrix[row_index][column_index] = 10;
+                m_matrix[row_index][column_index] = 10 + previous_value;
                 PrintMatrix();
-                Console.CursorVisible = false;
                 key = Console.ReadKey(true);
-                Console.CursorVisible = true;
                 value = Convert.ToInt32(key.KeyChar) - 48;
                 if (key.Key == ConsoleKey.W || key.Key == ConsoleKey.UpArrow)
                 {
@@ -309,37 +313,39 @@ namespace Sudoku
                     if (row_index != 0) row_index--;
                     else row_index = 8;
                 }
-                if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
+                else if (key.Key == ConsoleKey.S || key.Key == ConsoleKey.DownArrow)
                 {
                     m_matrix[row_index][column_index] = previous_value;
                     if (row_index != 8) row_index++;
                     else row_index = 0;
                 }
-                if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.RightArrow)
+                else if (key.Key == ConsoleKey.D || key.Key == ConsoleKey.RightArrow)
                 {
                     m_matrix[row_index][column_index] = previous_value;
                     if (column_index != 8) column_index++;
                     else column_index = 0;
                 }
-                if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
+                else if (key.Key == ConsoleKey.A || key.Key == ConsoleKey.LeftArrow)
                 {
                     m_matrix[row_index][column_index] = previous_value;
                     if (column_index != 0) column_index--;
                     else column_index = 8;
                 }
-                if (value >= 0 && value < 10)
+                else if (key.Key == ConsoleKey.Backspace)
+                {
+                    m_matrix[row_index][column_index] = 0;
+                }
+                else if (value >= 0 && value < 10)
                 {
                     m_matrix[row_index][column_index] = value;
-                    if (column_index == 8)
-                    {
-                        column_index = 0;
-                        row_index++;
-                        row_index %= 9;
-                    }
-                    else column_index++;
+                }
+                else
+                {
+                    m_matrix[row_index][column_index] -= 10;
                 }
                 Console.Clear();
             }
+
             m_matrix[row_index][column_index] = previous_value;
             for (int row = 0; row < 9; row++)
             {
@@ -1073,6 +1079,16 @@ namespace Sudoku
                 Console.WriteLine("The square is unsolvable");
                 Environment.Exit(0);
             }
+            int not_set_values = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                if (solver.DigitsLeft[i] == 9) not_set_values++;
+            }
+            if (not_set_values > 1)
+            {
+                Console.WriteLine("The square is unsolvable");
+                Environment.Exit(0);
+            }
             if (solver.IsNotCorrect())
             {
                 Console.WriteLine("The square is unsolvable");
@@ -1080,7 +1096,7 @@ namespace Sudoku
             }
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 20)
+            while ((solver.AllDigits > 0 || is_not_correct) && stopwatch.ElapsedMilliseconds < 50)
             {
                 tmp_digits = solver.AllDigits;
                 solver.SetPens();
@@ -1108,7 +1124,7 @@ namespace Sudoku
                 else attempt = 0;
             }
             stopwatch.Stop();
-            if (stopwatch.ElapsedMilliseconds >= 20)
+            if (stopwatch.ElapsedMilliseconds >= 50)
             {
                 Console.WriteLine("The square is unsolvable");
                 Environment.Exit(0);
@@ -1117,6 +1133,7 @@ namespace Sudoku
             Console.Clear();
             Console.WriteLine("Solved sudoku:");
             solver.PrintMatrix();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
             Environment.Exit(0);
         }
     }
