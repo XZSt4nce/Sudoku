@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="SolveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetPen.cs" />
+    <Compile Include="SetPens.cs" />
     <Compile Include="ProhibitNullNumbers.cs" />
     <Compile Include="ProhibitCells.cs" />
     <Compile Include="ProhibitOneChildRowAndColumn.cs" />
