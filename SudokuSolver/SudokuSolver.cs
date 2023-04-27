@@ -223,7 +223,8 @@ namespace Sudoku
 
         public bool Solved
         {
-            get { return m_solved; } set { m_solved = value; }
+            get { return m_solved; }
+            set { m_solved = value; }
         }
 
         public int[][] StartMatrix
@@ -998,6 +999,7 @@ namespace Sudoku
                 catch (KeyNotFoundException)
                 {
                     Console.WriteLine("The square is unsolvable");
+                    Console.ReadKey();
                     Environment.Exit(0);
                 }
                 m_savePoints.Remove(m_points);
@@ -1077,6 +1079,7 @@ namespace Sudoku
             if (solver.AllDigits > 64)
             {
                 Console.WriteLine("The square is unsolvable");
+                Console.ReadKey();
                 Environment.Exit(0);
             }
             int not_set_values = 0;
@@ -1087,11 +1090,13 @@ namespace Sudoku
             if (not_set_values > 1)
             {
                 Console.WriteLine("The square is unsolvable");
+                Console.ReadKey();
                 Environment.Exit(0);
             }
             if (solver.IsNotCorrect())
             {
                 Console.WriteLine("The square is unsolvable");
+                Console.ReadKey();
                 Environment.Exit(0);
             }
             Stopwatch stopwatch = new Stopwatch();
@@ -1127,6 +1132,7 @@ namespace Sudoku
             if (stopwatch.ElapsedMilliseconds >= 50)
             {
                 Console.WriteLine("The square is unsolvable");
+                Console.ReadKey();
                 Environment.Exit(0);
             }
             solver.Solved = true;
@@ -1134,6 +1140,7 @@ namespace Sudoku
             Console.WriteLine("Solved sudoku:");
             solver.PrintMatrix();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            Console.ReadKey();
             Environment.Exit(0);
         }
     }
